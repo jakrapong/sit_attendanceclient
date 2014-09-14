@@ -9,8 +9,8 @@ import org.junit.Test;
 import com.kmutt.cony.api.AttendanceAPI;
 import com.kmutt.cony.model.ClassSchedule;
 import com.kmutt.cony.model.Course;
-import com.kmutt.cony.model.StudentInfo;
-import com.kmutt.cony.model.StudentStatistic;
+import com.kmutt.cony.model.Statistic;
+import com.kmutt.cony.model.Student;
 import com.kmutt.cony.model.User;
 
 public class TestCallApi{
@@ -61,8 +61,16 @@ public class TestCallApi{
 		Assert.assertNotNull(list);
 	}
 	@Test
+	public void testGetClassScheduleCheckIn() throws Exception{
+		ClassSchedule classScd=null;
+		try{
+			classScd=mAttendanceAPI.setCredentail("kmutt","cony").getClassScheduleCheckIn(1,1);
+		}catch(Exception ex){}
+		Assert.assertNotNull(classScd);
+	}
+	@Test
 	public void testGetStudentList() throws Exception{
-		List<StudentStatistic>list=null;
+		List<Statistic>list=null;
 		try{
 			list=mAttendanceAPI.setCredentail("kmutt","cony").getStudentList(1);
 		}catch(Exception ex){}
@@ -70,18 +78,42 @@ public class TestCallApi{
 	}
 	@Test
 	public void testGetStudentListWith2Param() throws Exception{
-		StudentInfo student=null;
+		Statistic student=null;
 		try{
-			student=mAttendanceAPI.setCredentail("kmutt","cony").getStudentInfo("1",1);
+			student=mAttendanceAPI.setCredentail("kmutt","cony").getStudentInfo("S0001",1);
 		}catch(Exception ex){}
 		Assert.assertNotNull(student);
 	}
 	@Test
 	public void testGetStudentListWith1Param() throws Exception{
-		StudentInfo student=null;
+		Student student=null;
 		try{
-			student=mAttendanceAPI.setCredentail("kmutt","cony").getStudentInfo("1");
+			student=mAttendanceAPI.setCredentail("kmutt","cony").getStudentInfo("S0001");
 		}catch(Exception ex){}
 		Assert.assertNotNull(student);
+	}
+	@Test
+	public void testGetCurrentClassSchedule() throws Exception{
+		ClassSchedule classScd=null;
+		try{
+			classScd=mAttendanceAPI.setCredentail("kmutt","cony").getCurrentClassSchedule("09092014","1600");
+		}catch(Exception ex){}
+		Assert.assertNotNull(classScd);
+	}
+	@Test
+	public void testGetCurrentClassScheduleWithNoClass() throws Exception{
+		ClassSchedule classScd=null;
+		try{
+			classScd=mAttendanceAPI.setCredentail("kmutt","cony").getCurrentClassSchedule("09092014","0000");
+		}catch(Exception ex){}
+		Assert.assertNull(classScd);
+	}
+	@Test
+	public void testGetUserInfo() throws Exception{
+		User user=null;
+		try{
+			user=mAttendanceAPI.setCredentail("kmutt","cony").getUserInfo("1");
+		}catch(Exception ex){}
+		Assert.assertNotNull(user);
 	}
 }
