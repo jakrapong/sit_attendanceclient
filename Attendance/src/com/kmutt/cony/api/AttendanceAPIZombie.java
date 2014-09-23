@@ -72,6 +72,9 @@ public class AttendanceAPIZombie {
 			connection.setRequestProperty("Authorization", "Basic "
 					+ authEncoded);
 		}
+		
+		System.out.print("\ncall " + apiName);
+		
 		if (params != null) {
 			StringBuilder paramData = new StringBuilder();
 			paramData.append('{');
@@ -86,7 +89,7 @@ public class AttendanceAPIZombie {
 						String.valueOf(param.getValue()), "UTF-8")).append("\"");
 			}
 			paramData.append('}');
-			System.out.println("post data:" + paramData);
+			System.out.println(", data:" + paramData);
 //			byte[] paramDataBytes = paramData.toString().getBytes("UTF-8");
 			connection.setRequestProperty("Content-Type", "application/json");
 			connection.setRequestProperty("Content-Length",""+paramData.toString().getBytes().length);
@@ -110,7 +113,7 @@ public class AttendanceAPIZombie {
 			return sb.toString();
 		} catch (IOException ex) {
 			
-			ex.printStackTrace();
+//			ex.printStackTrace();
 			
 			String msg = ex.getMessage();
 			String s = "HTTP response code: ";
@@ -127,6 +130,11 @@ public class AttendanceAPIZombie {
 			connection.disconnect();
 		}
 	}
+	
+	private void checkLogin() throws Exception{
+		if(instructor == null || instructor.getType() != User.TYPE_INSTRUCTOR)
+			getMyInfo();
+	}
 
 	public User getMyInfo() throws Exception {
 		String apiName = "/jsonresponse/get_user_info";
@@ -139,12 +147,15 @@ public class AttendanceAPIZombie {
 		
 		if(instructor == null || instructor.getType() != User.TYPE_INSTRUCTOR)
 			throw new Exception("401");
+		
 		return instructor;
 	}
 
 	public List<Course> getCourseList() throws Exception {
 		String apiName = "/jsonresponse/get_instructor_groups/";
 		String method = "POST";
+		
+		checkLogin();
 		
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
 		param.add(new SimpleEntry<String,Object>("instructor_id", instructor.getUserId()));
@@ -157,6 +168,9 @@ public class AttendanceAPIZombie {
 	public List<com.kmutt.cony.model.zombie.Class> getClassSchedule(int groupId) throws Exception {
 		String apiName = "/jsonresponse/get_group_classes/";
 		String method = "POST";
+		
+		checkLogin();
+		
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
 		param.add(new SimpleEntry<String,Object>("group_id",groupId));
 		
@@ -168,6 +182,9 @@ public class AttendanceAPIZombie {
 	public List<StudentAttendance> getClassScheduleCheckIn(int groupId, int classScheduleId) throws Exception {
 		String apiName = "/jsonresponse/get_class_attendance/";
 		String method = "POST";
+		
+		checkLogin();
+		
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
 		param.add(new SimpleEntry<String,Object>("group_id",groupId));
 		param.add(new SimpleEntry<String,Object>("class_id",classScheduleId));
@@ -180,6 +197,9 @@ public class AttendanceAPIZombie {
 	public List<StudentStat> getStudentList(int groupId) throws Exception {
 		String apiName = "/jsonresponse/get_group_students/";
 		String method = "POST";
+		
+		checkLogin();
+		
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
 		param.add(new SimpleEntry<String,Object>("group_id",groupId));
 		
@@ -192,6 +212,9 @@ public class AttendanceAPIZombie {
 			throws Exception {
 		String apiName = "/jsonresponse/get_student_info/";
 		String method = "POST";
+		
+		checkLogin();
+		
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
 		param.add(new SimpleEntry<String,Object>("group_id",groupId));
 		param.add(new SimpleEntry<String,Object>("student_id",studentId));
