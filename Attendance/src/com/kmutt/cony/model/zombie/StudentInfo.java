@@ -6,7 +6,7 @@ import java.util.List;
 public class StudentInfo{
    	private List<Attendance> attendance;
    	private Statistic statistic;
-   	private Student student;
+   	private User student;
 
  	public List<Attendance> getAttendance(){
 		return this.attendance;
@@ -20,10 +20,10 @@ public class StudentInfo{
 	public void setStatistic(Statistic statistic){
 		this.statistic = statistic;
 	}
- 	public Student getStudent(){
+ 	public User getStudent(){
 		return this.student;
 	}
-	public void setStudent(Student student){
+	public void setStudent(User student){
 		this.student = student;
 	}
 }

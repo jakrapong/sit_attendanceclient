@@ -2,12 +2,17 @@
 package com.kmutt.cony.model.zombie;
 
 
-public class Instructor{
+public class User{
+	
+	public static int TYPE_INSTRUCTOR = 0;
+	public static int TYPE_STUDENT = 1;
+	
    	private String firstName;
    	private int gender;
    	private String lastName;
    	private String photo;
    	private int userId;
+   	private int type;
 
     private String address;
     private String telephone;
@@ -15,6 +20,9 @@ public class Instructor{
     private String facebook;
     private String twitter;
     
+    public User(){
+    	type = -1;
+    }
  	public String getFirstName(){
 		return this.firstName;
 	}
@@ -46,6 +54,12 @@ public class Instructor{
 		this.userId = userId;
 	}
 	
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
 	public String getAddress() {
 		return address;
 	}

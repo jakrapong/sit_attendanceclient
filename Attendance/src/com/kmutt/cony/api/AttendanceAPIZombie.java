@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.kmutt.cony.model.zombie.Course;
-import com.kmutt.cony.model.zombie.Instructor;
+import com.kmutt.cony.model.zombie.User;
 import com.kmutt.cony.model.zombie.StudentAttendance;
 import com.kmutt.cony.model.zombie.StudentInfo;
 import com.kmutt.cony.model.zombie.StudentStat;
@@ -32,7 +32,8 @@ public class AttendanceAPIZombie {
 	private String username;
 	private String password;
 
-	private String insructureId = "8";
+	private User instructor;
+	
 	Gson GSON;
 	
 	private AttendanceAPIZombie() {
@@ -71,7 +72,7 @@ public class AttendanceAPIZombie {
 			connection.setRequestProperty("Authorization", "Basic "
 					+ authEncoded);
 		}
-		if (params != null && !params.isEmpty()) {
+		if (params != null) {
 			StringBuilder paramData = new StringBuilder();
 			paramData.append('{');
 			for (Entry<String, Object> param : params) {					
@@ -127,16 +128,18 @@ public class AttendanceAPIZombie {
 		}
 	}
 
-	public Instructor getMyInfo() throws Exception {
-		String apiName = "/jsonresponse/get_instructor_info";
+	public User getMyInfo() throws Exception {
+		String apiName = "/jsonresponse/get_user_info";
 		String method = "POST";
 		
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
-		param.add(new SimpleEntry<String,Object>("instructor_id",insructureId));
-		
-		
 		String json = getJson(apiName, method, param);
-		return GSON.fromJson(json, Instructor.class);
+		
+		instructor = GSON.fromJson(json, User.class);
+		
+		if(instructor == null || instructor.getType() != User.TYPE_INSTRUCTOR)
+			throw new Exception("401");
+		return instructor;
 	}
 
 	public List<Course> getCourseList() throws Exception {
@@ -144,7 +147,7 @@ public class AttendanceAPIZombie {
 		String method = "POST";
 		
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
-		param.add(new SimpleEntry<String,Object>("instructor_id",insructureId));
+		param.add(new SimpleEntry<String,Object>("instructor_id", instructor.getUserId()));
 		
 		String json = getJson(apiName, method, param);
 		return GSON.fromJson(json, new TypeToken<List<Course>>() {

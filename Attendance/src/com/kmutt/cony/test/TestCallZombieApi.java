@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.kmutt.cony.api.AttendanceAPIZombie;
 import com.kmutt.cony.model.zombie.Course;
-import com.kmutt.cony.model.zombie.Instructor;
+import com.kmutt.cony.model.zombie.User;
 import com.kmutt.cony.model.zombie.StudentAttendance;
 import com.kmutt.cony.model.zombie.StudentInfo;
 import com.kmutt.cony.model.zombie.StudentStat;
@@ -40,7 +40,7 @@ public class TestCallZombieApi{
 	}
 	@Test
 	public void testGetMyInfo(){
-		Instructor user=null;
+		User user=null;
 		try{
 			user=mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
 		}catch(Exception ex){
