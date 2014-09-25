@@ -43,6 +43,7 @@ public class TestCallApi{
 			user=mAttendanceAPI.setCredentail("kmutt","cony").getMyInfo();
 		}catch(Exception ex){}
 		Assert.assertNotNull(user);
+		Assert.assertEquals("kmutt", user.getFirstName());
 	}
 	@Test
 	public void testGetCourseList() throws Exception{
@@ -105,7 +106,9 @@ public class TestCallApi{
 		ClassSchedule classScd=null;
 		try{
 			classScd=mAttendanceAPI.setCredentail("kmutt","cony").getCurrentClassSchedule("09092014","0000");
-		}catch(Exception ex){}
+		}catch(Exception ex){
+			Assert.fail();
+		}
 		Assert.assertNull(classScd);
 	}
 	@Test
