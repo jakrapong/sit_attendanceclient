@@ -5,6 +5,7 @@ import java.util.List;
 public class Group {
 	private Integer groupId;
     private Integer courseId;
+    private String subject;
     private String description;
     private String classroom;
     private String teacherId;
@@ -24,6 +25,10 @@ public class Group {
 	}
 	public void setCourseId(Integer courseId) {
 		this.courseId = courseId;
+	}
+	public String getSubject(){return subject;}
+	public void setSubject(String subject){
+		this.subject=subject;
 	}
 	public String getDescription() {
 		return description;

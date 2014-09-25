@@ -4,15 +4,16 @@ import java.util.List;
 
 public class User {
 	private String userId;
+	private int userType;
     private String nickName;
     private String lastName;
     private String firstName;
-    private boolean gender;
+    private int gender;
     private String address;
     private String phoneNumber;
     private String email;
     private String facebook;
-    private String twitter;
+    private String twister;
     private String photo;
     private List<Group>registered;
 	public User() {}
@@ -21,6 +22,12 @@ public class User {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public int getUserType() {
+		return userType;
+	}
+	public void setUserType(int userType) {
+		this.userType = userType;
 	}
 	public String getNickName() {
 		return nickName;
@@ -40,10 +47,10 @@ public class User {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	public boolean isGender() {
+	public int getGender() {
 		return gender;
 	}
-	public void setGender(boolean gender) {
+	public void setGender(int gender) {
 		this.gender = gender;
 	}
 	public String getAddress() {
@@ -70,11 +77,11 @@ public class User {
 	public void setFacebook(String facebook) {
 		this.facebook = facebook;
 	}
-	public String getTwitter() {
-		return twitter;
+	public String getTwister() {
+		return twister;
 	}
-	public void setTwitter(String twitter) {
-		this.twitter = twitter;
+	public void setTwister(String twister) {
+		this.twister = twister;
 	}
 	public String getPhoto() {
 		return photo;
@@ -90,13 +97,13 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", nickName=" + nickName
-				+ ", lastName=" + lastName + ", firstName=" + firstName
-				+ ", gender=" + gender + ", address=" + address
-				+ ", phoneNumber=" + phoneNumber + ", email=" + email
-				+ ", facebook=" + facebook + ", twitter=" + twitter
-				+ ", photo=" + photo + "]";
+		return "User [userId=" + userId + ", userType=" + userType
+				+ ", nickName=" + nickName + ", lastName=" + lastName
+				+ ", firstName=" + firstName + ", gender=" + gender
+				+ ", address=" + address + ", phoneNumber=" + phoneNumber
+				+ ", email=" + email + ", facebook=" + facebook + ", twister="
+				+ twister + ", photo=" + photo + ", registered=" + registered
+				+ "]";
 	}
 	
-    
 }

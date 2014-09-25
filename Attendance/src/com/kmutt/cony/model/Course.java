@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Course {
 	private Integer courseId;
-    private String subject;
+    private String courseName;
     private String description;
     private List<Group>groups;
     public Course(){}
@@ -14,11 +14,11 @@ public class Course {
 	public void setCourseId(Integer courseId) {
 		this.courseId = courseId;
 	}
-	public String getSubject() {
-		return subject;
+	public String getCourseName() {
+		return courseName;
 	}
-	public void setSubject(String subject) {
-		this.subject = subject;
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
 	}
 	public String getDescription() {
 		return description;
@@ -34,7 +34,7 @@ public class Course {
 	}
 	@Override
 	public String toString() {
-		return "Course [courseId=" + courseId + ", subject=" + subject
+		return "Course [courseId=" + courseId + ", subject=" + courseName
 				+ ", description=" + description + "]";
 	}
     
