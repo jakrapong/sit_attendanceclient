@@ -145,7 +145,7 @@ public class AttendanceAPIZombie {
 		
 		instructor = GSON.fromJson(json, User.class);
 		
-		if(instructor == null || instructor.getType() != User.TYPE_INSTRUCTOR)
+		if(instructor == null)// || instructor.getType() != User.TYPE_INSTRUCTOR)
 			throw new Exception("401");
 		
 		return instructor;

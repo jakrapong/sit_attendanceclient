@@ -2,18 +2,16 @@ package com.kmutt.cony.test;
 
 import java.util.List;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.kmutt.cony.api.AttendanceAPIZombie;
 import com.kmutt.cony.model.zombie.Course;
-import com.kmutt.cony.model.zombie.User;
 import com.kmutt.cony.model.zombie.StudentAttendance;
 import com.kmutt.cony.model.zombie.StudentInfo;
 import com.kmutt.cony.model.zombie.StudentStat;
+import com.kmutt.cony.model.zombie.User;
 
 public class TestCallZombieApi{
 	AttendanceAPIZombie mAttendanceAPI;
@@ -98,6 +96,7 @@ public class TestCallZombieApi{
 			Assert.fail();
 		}
 		Assert.assertNotNull(list);
+		
 		Assert.assertEquals(4, list.size());
 	}
 	@Test
@@ -114,7 +113,6 @@ public class TestCallZombieApi{
 		Assert.assertNotNull(user.getStatistic());
 		Assert.assertNotNull(user.getAttendance());
 		
-		System.out.println(ToStringBuilder.reflectionToString(user.getAttendance().get(0),ToStringStyle.MULTI_LINE_STYLE));
 		
 		Assert.assertEquals("Santiago", user.getStudent().getFirstName());
 		Assert.assertEquals(1, user.getStatistic().getPresent());
