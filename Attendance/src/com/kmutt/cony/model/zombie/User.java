@@ -7,6 +7,9 @@ public class User{
 	public static int TYPE_INSTRUCTOR = 0;
 	public static int TYPE_STUDENT = 1;
 	
+	public static int GENDER_MALE = 0;
+	public static int GENDER_FEMALE = 1;
+	
    	private String firstName;
    	private int gender;
    	private String lastName;

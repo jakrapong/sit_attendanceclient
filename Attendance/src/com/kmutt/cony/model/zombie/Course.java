@@ -6,7 +6,8 @@ import java.util.List;
 public class Course{
    	private int courseId;
    	private String courseName;
-   	private List groups;
+   	private String courseSemester;
+   	private List<Groups> groups;
 
  	public int getCourseId(){
 		return this.courseId;
@@ -20,10 +21,16 @@ public class Course{
 	public void setCourseName(String courseName){
 		this.courseName = courseName;
 	}
- 	public List getGroups(){
+ 	public List<Groups> getGroups(){
 		return this.groups;
 	}
-	public void setGroups(List groups){
+	public void setGroups(List<Groups> groups){
 		this.groups = groups;
+	}
+	public String getCourseSemester() {
+		return courseSemester;
+	}
+	public void setCourseSemester(String courseSemester) {
+		this.courseSemester = courseSemester;
 	}
 }

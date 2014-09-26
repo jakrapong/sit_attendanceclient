@@ -7,6 +7,7 @@ public class Class{
 //   	private Date datetime;
    	private long datetimeSeconds;
    	private int period;
+   	private String classRoom;
 
  	public int getClassId(){
 		return this.classId;
@@ -31,5 +32,11 @@ public class Class{
 	}
 	public void setPeriod(int period){
 		this.period = period;
+	}
+	public String getClassRoom() {
+		return classRoom;
+	}
+	public void setClassRoom(String classRoom) {
+		this.classRoom = classRoom;
 	}
 }

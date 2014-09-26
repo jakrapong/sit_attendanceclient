@@ -2,6 +2,11 @@
 package com.kmutt.cony.model.zombie;
 
 public class StudentAttendance{
+	
+	public static int STATUS_PRESENT = 1;
+	public static int STATUS_LATT = 2;
+	public static int STATUS_ABSENCE = 3;
+	
    	private int checkInStatus;
    	private User student;
 

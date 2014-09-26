@@ -208,7 +208,7 @@ public class AttendanceAPIZombie {
 		}.getType());
 	}
 	
-	public StudentInfo getStudentInfo(int groupId, String studentId)
+	public StudentInfo getStudentInfo(int groupId, int studentId)
 			throws Exception {
 		String apiName = "/jsonresponse/get_student_info/";
 		String method = "POST";
