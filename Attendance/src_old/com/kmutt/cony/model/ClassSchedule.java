@@ -4,8 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 public class ClassSchedule {
-	private Integer classScheduleId;
-    private Date dateTime;
+	private Integer classId;
+    private Date datetime;
+    private long datetimeSeconds;
     private Integer period;
     private String description;
     private List<TimeAttendance>timeAttendance;
@@ -13,17 +14,21 @@ public class ClassSchedule {
     private Integer groupId;
     private Group group;
     public ClassSchedule(){}
-	public Integer getClassScheduleId() {
-		return classScheduleId;
+	public Integer getClassId() {
+		return classId;
 	}
-	public void setClassScheduleId(Integer classScheduleId) {
-		this.classScheduleId = classScheduleId;
+	public void setClassId(Integer classId) {
+		this.classId = classId;
 	}
-	public Date getDateTime() {
-		return dateTime;
+	public Date getDatetime() {
+		return datetime;
 	}
-	public void setDateTime(Date dateTime) {
-		this.dateTime = dateTime;
+	public void setDatetime(Date datetime) {
+		this.datetime = datetime;
+	}
+	public long getDatetimeSeconds(){return datetimeSeconds;}
+	public void setDatetimeSeconds(long datetimeSeconds){
+		this.datetimeSeconds=datetimeSeconds;
 	}
 	public Integer getPeriod() {
 		return period;
@@ -63,8 +68,8 @@ public class ClassSchedule {
 	}
 	@Override
 	public String toString() {
-		return "ClassSchedule [classScheduleId=" + classScheduleId
-				+ ", dateTime=" + dateTime + ", period=" + period
+		return "ClassSchedule [classScheduleId=" + classId
+				+ ", dateTime=" + datetime + ", period=" + period
 				+ ", description=" + description + ", timeAttendance="
 				+ timeAttendance + ", courseId=" + courseId + ", groupId="
 				+ groupId + "]";
