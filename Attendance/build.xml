@@ -6,36 +6,51 @@
 			<format property="now" pattern="MMM d yyyy hh:mm aa" />
 		</tstamp>
 		<property environment="env" />
-		
+
 		<property file="build_jenkins.properties" />
-		
+
 		<property name="PROJECT_HOME" value="${basedir}" />
-		
+
 		<property name="SRC_DIR" value="${PROJECT_HOME}/src" />
-		<property name="BUILD_DIR" value="${PROJECT_HOME}/classes" />		
-	
+		<property name="BUILD_DIR" value="${PROJECT_HOME}/classes" />
+
 	</target>
 
 	<target name="compile">
 		<mkdir dir="${BUILD_DIR}" />
-		<javac srcdir="${SRC_DIR}" destdir="${BUILD_DIR}" includeantruntime="false">
+		<javac srcdir="${SRC_DIR}" destdir="${BUILD_DIR}"
+			includeantruntime="false">
 			<classpath>
 				<fileset dir="${PROJECT_HOME}/libs">
-					<include name="*.jar"/>				
-				</fileset>	
+					<include name="*.jar" />
+				</fileset>
 			</classpath>
 		</javac>
 		<copy todir="${BUILD_DIR}">
 			<fileset dir="${SRC_DIR}">
-				<exclude name="**/*.java"/>
+				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
 	</target>
 
 	<target name="jar">
-	    <jar destfile="attendanceservice.jar" basedir="${BUILD_DIR}"/>
+		<jar destfile="libs/attendanceservice.jar" basedir="${BUILD_DIR}" />
 	</target>
 
+	<target name="test">
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath>
+				<pathelement location="${SRC_DIR}" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+
+			<test name="com.kmutt.cony.test.TestCallZombieApi"
+				haltonfailure="no" outfile="result">
+				<formatter type="xml" />
+			</test>
+		</junit>
+	</target>
+	
 	<target name="build" depends="init,compile,jar">
 	</target>
 </project>
