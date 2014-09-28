@@ -1,9 +1,10 @@
 
 package com.kmutt.cony.model.zombie;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Statistic{
+public class Statistic  implements Serializable{
    	private int absent;
    	private int late;
    	private int present;

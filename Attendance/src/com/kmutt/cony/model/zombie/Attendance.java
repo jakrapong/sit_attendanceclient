@@ -1,9 +1,11 @@
 
 package com.kmutt.cony.model.zombie;
 
+import java.io.Serializable;
 
 
-public class Attendance{
+
+public class Attendance implements Serializable{
    	private int checkInStatus;
    	@com.google.gson.annotations.SerializedName("class")
    	private Class _class;

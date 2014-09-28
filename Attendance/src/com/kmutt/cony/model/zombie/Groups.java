@@ -1,8 +1,10 @@
 
 package com.kmutt.cony.model.zombie;
 
+import java.io.Serializable;
 
-public class Groups{
+
+public class Groups implements Serializable{
    	private String classroom;
    	private String description;
    	private int groupId;

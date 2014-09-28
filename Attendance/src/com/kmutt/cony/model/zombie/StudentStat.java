@@ -1,8 +1,10 @@
 
 package com.kmutt.cony.model.zombie;
 
+import java.io.Serializable;
 
-public class StudentStat{
+
+public class StudentStat implements Serializable{
    	private int absent;
    	private String firstName;
    	private int gender;

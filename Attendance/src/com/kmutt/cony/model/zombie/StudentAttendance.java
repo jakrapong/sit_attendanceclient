@@ -1,7 +1,9 @@
 
 package com.kmutt.cony.model.zombie;
 
-public class StudentAttendance{
+import java.io.Serializable;
+
+public class StudentAttendance  implements Serializable{
 	
 	public static int STATUS_PRESENT = 1;
 	public static int STATUS_LATT = 2;

@@ -1,8 +1,10 @@
 
 package com.kmutt.cony.model.zombie;
 
+import java.io.Serializable;
 
-public class Class{
+
+public class Class implements Serializable{
    	private int classId;
 //   	private Date datetime;
    	private long datetimeSeconds;

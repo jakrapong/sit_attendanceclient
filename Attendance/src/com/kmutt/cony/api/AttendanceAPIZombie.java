@@ -2,6 +2,8 @@ package com.kmutt.cony.api;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,6 +14,7 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Scanner;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -40,6 +43,30 @@ public class AttendanceAPIZombie {
 		username = null;
 		password = null;
 		GSON = new GsonBuilder().create();
+		init();
+	}
+	private void init(){
+		try{
+			Scanner f = new Scanner(new File("credential.dat"));
+			username = f.nextLine();
+			password = f.nextLine();
+			f.close();
+			getMyInfo();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	private void save(){
+		try {
+			
+			FileWriter f = new FileWriter("credential.dat");
+			f.write(username);
+			f.write("\r\n");
+			f.write(password);			
+			f.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public synchronized static AttendanceAPIZombie getInstance() {
@@ -143,6 +170,8 @@ public class AttendanceAPIZombie {
 		instructor = null;
 		username = null;
 		password = null;
+		File f = new File("credential.dat");
+		f.delete();
 	}
 	
 	public User getMyInfo() throws Exception {
@@ -157,6 +186,7 @@ public class AttendanceAPIZombie {
 		if(instructor == null)// || instructor.getType() != User.TYPE_INSTRUCTOR)
 			throw new Exception("401");
 		
+		save();
 		return instructor;
 	}
 

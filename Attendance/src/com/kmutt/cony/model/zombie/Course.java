@@ -1,9 +1,10 @@
 
 package com.kmutt.cony.model.zombie;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Course{
+public class Course implements Serializable{
    	private int courseId;
    	private String courseName;
    	private String courseSemester;

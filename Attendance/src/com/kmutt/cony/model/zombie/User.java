@@ -1,8 +1,10 @@
 
 package com.kmutt.cony.model.zombie;
 
+import java.io.Serializable;
 
-public class User{
+
+public class User implements Serializable{
 	
 	public static int TYPE_INSTRUCTOR = 0;
 	public static int TYPE_STUDENT = 1;
