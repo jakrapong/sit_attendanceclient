@@ -43,18 +43,19 @@ public class AttendanceAPIZombie {
 		username = null;
 		password = null;
 		GSON = new GsonBuilder().create();
-		init();
 	}
-	private void init(){
+	public boolean restoreUser(){
 		try{
 			Scanner f = new Scanner(new File("credential.dat"));
 			username = f.nextLine();
 			password = f.nextLine();
 			f.close();
 			getMyInfo();
+			return true;
 		} catch (Exception e){
 			e.printStackTrace();
 		}
+		return false;
 	}
 	private void save(){
 		try {

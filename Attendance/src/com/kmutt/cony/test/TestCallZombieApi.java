@@ -64,6 +64,17 @@ public class TestCallZombieApi{
 	}
 	
 	@Test
+	public void testRestoreUser(){
+		try{
+			mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
+			Assert.assertTrue(mAttendanceAPI.restoreUser());
+		}catch(Exception ex){
+			ex.printStackTrace();
+			Assert.fail();
+		}
+	}
+	
+	@Test
 	public void testLogout(){
 		try{
 			mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
