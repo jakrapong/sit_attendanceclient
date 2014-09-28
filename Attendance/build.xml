@@ -41,6 +41,7 @@
 		<junit printsummary="yes" haltonfailure="yes">
 			<classpath>
 				<pathelement location="${SRC_DIR}" />
+				<pathelement location="${PROJECT_HOME}/libs" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
 
@@ -51,6 +52,6 @@
 		</junit>
 	</target>
 	
-	<target name="build" depends="init,compile,jar">
+	<target name="build" depends="init,compile,jar,test">
 	</target>
 </project>
