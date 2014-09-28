@@ -38,7 +38,14 @@ public class TestCallZombieApi{
 			Assert.assertEquals("401",e.getMessage());
 		}
 	}
-
+	@Test
+	public void testCallApiCorrectAuthentication(){
+		try {
+			mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
+		} catch (Exception e) {
+			Assert.fail();
+		}
+	}
 	@Test
 	public void testisLogin_false(){
 		Assert.assertFalse(mAttendanceAPI.isLogin());
@@ -81,14 +88,16 @@ public class TestCallZombieApi{
 		}
 		Assert.assertNotNull(user);
 		Assert.assertEquals("ADDDress", user.getAddress());
-//		Assert.assertEquals("", user.getEmail());
+		Assert.assertEquals(null, user.getEmail());
 		Assert.assertEquals("www.facebook.com", user.getFacebook());
 		Assert.assertEquals("Carlos", user.getFirstName());
 		Assert.assertEquals(User.GENDER_MALE, user.getGender());
 		Assert.assertEquals("Zapata", user.getLastName());
-//		Assert.assertEquals("", user.getPhoneNumber());
+		Assert.assertEquals(null, user.getPhoneNumber());
 		Assert.assertEquals("http://gala.ie.st/face.png", user.getPhoto());
 		Assert.assertEquals("www.twitter.com", user.getTwitter());
+		
+		Assert.assertEquals(User.TYPE_INSTRUCTOR, user.getType());
 	}
 	@Test
 	public void testGetCourseList() throws Exception{
