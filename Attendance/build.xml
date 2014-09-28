@@ -40,8 +40,10 @@
 	<target name="test">
 		<junit printsummary="yes" haltonfailure="yes">
 			<classpath>
-				<pathelement path="${PROJECT_HOME}/libs" />
 				<pathelement path="${java.class.path}" />
+				<fileset dir="${PROJECT_HOME}/libs">
+					<include name="*.jar" />
+				</fileset>
 			</classpath>
 
 			<test name="com.kmutt.cony.test.TestCallZombieApi"
