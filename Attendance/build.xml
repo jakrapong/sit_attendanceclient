@@ -40,8 +40,7 @@
 	<target name="test">
 		<junit printsummary="yes" haltonfailure="yes">
 			<classpath>
-				<pathelement location="${SRC_DIR}" />
-				<pathelement location="${PROJECT_HOME}/libs" />
+				<pathelement path="${PROJECT_HOME}/libs" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
 
