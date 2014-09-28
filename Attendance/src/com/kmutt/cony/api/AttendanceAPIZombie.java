@@ -30,6 +30,8 @@ import com.kmutt.cony.model.zombie.StudentStat;
 public class AttendanceAPIZombie {
 	public static final String WEB_PATH = "http://gala.cs.iastate.edu:3000";
 
+	private static String credentialFile = "credential.dat";
+	private static String credentialFilePath = ".";
 	private static AttendanceAPIZombie instance;
 
 	private String username;
@@ -44,9 +46,12 @@ public class AttendanceAPIZombie {
 		password = null;
 		GSON = new GsonBuilder().create();
 	}
+	public void setPath(String path){
+		credentialFilePath = path;
+	}
 	public boolean restoreUser(){
 		try{
-			Scanner f = new Scanner(new File("credential.dat"));
+			Scanner f = new Scanner(new File(credentialFilePath, credentialFile));
 			username = f.nextLine();
 			password = f.nextLine();
 			f.close();
@@ -60,7 +65,7 @@ public class AttendanceAPIZombie {
 	private void save(){
 		try {
 			
-			FileWriter f = new FileWriter("credential.dat");
+			FileWriter f = new FileWriter(new File(credentialFilePath, credentialFile));
 			f.write(username);
 			f.write("\r\n");
 			f.write(password);			
@@ -171,7 +176,7 @@ public class AttendanceAPIZombie {
 		instructor = null;
 		username = null;
 		password = null;
-		File f = new File("credential.dat");
+		File f = new File(credentialFilePath, credentialFile);
 		f.delete();
 	}
 	
