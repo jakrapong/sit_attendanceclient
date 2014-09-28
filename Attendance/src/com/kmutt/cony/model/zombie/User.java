@@ -35,6 +35,11 @@ public class User{
  	public int getGender(){
 		return this.gender;
 	}
+ 	public String getString(){
+ 		if(this.gender == GENDER_MALE)
+ 			return "Male";
+		return "Femail";
+	}
 	public void setGender(int gender){
 		this.gender = gender;
 	}
