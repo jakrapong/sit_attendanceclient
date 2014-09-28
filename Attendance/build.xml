@@ -51,6 +51,6 @@
 		</junit>
 	</target>
 	
-	<target name="build" depends="init,compile,jar">
+	<target name="build" depends="init,compile,jar,test">
 	</target>
 </project>
