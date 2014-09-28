@@ -135,7 +135,16 @@ public class AttendanceAPIZombie {
 		if(instructor == null || instructor.getType() != User.TYPE_INSTRUCTOR)
 			getMyInfo();
 	}
+	public boolean isLogin(){
+		return instructor != null;
+	}
 
+	public void logout(){
+		instructor = null;
+		username = null;
+		password = null;
+	}
+	
 	public User getMyInfo() throws Exception {
 		String apiName = "/jsonresponse/get_user_info";
 		String method = "POST";

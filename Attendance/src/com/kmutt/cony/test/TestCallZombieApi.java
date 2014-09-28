@@ -19,6 +19,7 @@ public class TestCallZombieApi{
 	@Before
 	public void init(){
 		mAttendanceAPI = AttendanceAPIZombie.getInstance();
+		mAttendanceAPI.logout();
 	}
 	
 	@Test
@@ -37,6 +38,38 @@ public class TestCallZombieApi{
 			Assert.assertEquals("401",e.getMessage());
 		}
 	}
+
+	@Test
+	public void testisLogin_false(){
+		Assert.assertFalse(mAttendanceAPI.isLogin());
+	}
+	
+	@Test
+	public void testisLogin_true(){
+		try{
+			mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			Assert.fail();
+		}
+		
+		Assert.assertTrue(mAttendanceAPI.isLogin());
+	}
+	
+	@Test
+	public void testLogout(){
+		try{
+			mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			Assert.fail();
+		}
+		
+		Assert.assertTrue(mAttendanceAPI.isLogin());
+		mAttendanceAPI.logout();
+		Assert.assertFalse(mAttendanceAPI.isLogin());
+	}
+	
 	@Test
 	public void testGetMyInfo(){
 		User user=null;
