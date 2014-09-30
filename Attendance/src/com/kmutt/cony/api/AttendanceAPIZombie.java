@@ -7,11 +7,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -41,10 +43,13 @@ public class AttendanceAPIZombie {
 	
 	Gson GSON;
 	
+	private HashMap<String, Object> cache;
+	
 	private AttendanceAPIZombie() {
 		username = null;
 		password = null;
 		GSON = new GsonBuilder().create();
+		cache = new HashMap<String, Object>();
 	}
 	public void setPath(String path){
 		credentialFilePath = path;
@@ -87,10 +92,34 @@ public class AttendanceAPIZombie {
 		return this;
 	}
 
-	private String getJson(String apiName, String method) throws Exception {
-		return getJson(apiName, method, null);
+//	private String getJson(String apiName, String method) throws Exception {
+//		return getJson(apiName, method, null);
+//	}
+	private boolean hasCache(String url,List<Entry<String, Object>> param) throws UnsupportedEncodingException{
+		return cache.containsKey(url + toParamString(param));
 	}
-
+	private Object getCache(String url,List<Entry<String, Object>> param) throws UnsupportedEncodingException{
+		return cache.get(url + toParamString(param));
+	}
+	private void saveCache(String url, List<Entry<String, Object>> param, Object obj) throws UnsupportedEncodingException{
+		cache.put(url + toParamString(param), obj);
+	}
+	private String toParamString(List<Entry<String, Object>> params) throws UnsupportedEncodingException{
+		StringBuilder paramData = new StringBuilder();
+		paramData.append('{');
+		for (Entry<String, Object> param : params) {					
+			
+			if (paramData.length() > 1)
+				paramData.append(',');
+			
+			paramData.append("\"").append(URLEncoder.encode(param.getKey(), "UTF-8")).append("\"");
+			paramData.append(":");
+			paramData.append("\"").append(URLEncoder.encode(
+					String.valueOf(param.getValue()), "UTF-8")).append("\"");
+		}
+		paramData.append('}');
+		return paramData.toString();
+	}
 	private String getJson(String apiName, String method,
 			List<Entry<String, Object>> params) throws Exception {
 		URL url = new URL(WEB_PATH + apiName);
@@ -109,28 +138,17 @@ public class AttendanceAPIZombie {
 		System.out.print("\ncall " + apiName);
 		
 		if (params != null) {
-			StringBuilder paramData = new StringBuilder();
-			paramData.append('{');
-			for (Entry<String, Object> param : params) {					
-				
-				if (paramData.length() > 1)
-					paramData.append(',');
-				
-				paramData.append("\"").append(URLEncoder.encode(param.getKey(), "UTF-8")).append("\"");
-				paramData.append(":");
-				paramData.append("\"").append(URLEncoder.encode(
-						String.valueOf(param.getValue()), "UTF-8")).append("\"");
-			}
-			paramData.append('}');
+			String paramData = toParamString(params);
+
 			System.out.println(", data:" + paramData);
 //			byte[] paramDataBytes = paramData.toString().getBytes("UTF-8");
 			connection.setRequestProperty("Content-Type", "application/json");
-			connection.setRequestProperty("Content-Length",""+paramData.toString().getBytes().length);
+			connection.setRequestProperty("Content-Length",""+paramData.getBytes().length);
 			
 			connection.setDoOutput(true);
 			
 			DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-			out.writeBytes(paramData.toString());
+			out.writeBytes(paramData);
 			out.flush();
 			out.close();
 		}
@@ -176,15 +194,25 @@ public class AttendanceAPIZombie {
 		instructor = null;
 		username = null;
 		password = null;
+		cache.clear();
 		File f = new File(credentialFilePath, credentialFile);
 		f.delete();
 	}
 	
 	public User getMyInfo() throws Exception {
+		return getMyInfo(true);
+	}
+	public User getMyInfo(boolean cache) throws Exception {
 		String apiName = "/jsonresponse/get_user_info";
 		String method = "POST";
 		
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
+		
+		//caching
+		if(cache && hasCache(apiName, param)){
+			return (User) getCache(apiName, param);
+		}
+		
 		String json = getJson(apiName, method, param);
 		
 		instructor = GSON.fromJson(json, User.class);
@@ -193,10 +221,14 @@ public class AttendanceAPIZombie {
 			throw new Exception("401");
 		
 		save();
+		saveCache(apiName, param, instructor);
 		return instructor;
 	}
 
 	public List<Course> getCourseList() throws Exception {
+		return getCourseList(true);
+	}
+	public List<Course> getCourseList(boolean cache) throws Exception {
 		String apiName = "/jsonresponse/get_instructor_groups/";
 		String method = "POST";
 		
@@ -205,12 +237,22 @@ public class AttendanceAPIZombie {
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
 		param.add(new SimpleEntry<String,Object>("instructor_id", instructor.getUserId()));
 		
+		//caching
+		if(cache && hasCache(apiName, param)){
+			return (List<Course>) getCache(apiName, param);
+		}
+				
 		String json = getJson(apiName, method, param);
-		return GSON.fromJson(json, new TypeToken<List<Course>>() {
-		}.getType());
+		
+		List<Course> list = GSON.fromJson(json, new TypeToken<List<Course>>() {}.getType());
+		saveCache(apiName, param, list);
+		return list;
 	}
 
 	public List<com.kmutt.cony.model.zombie.Class> getClassSchedule(int groupId) throws Exception {
+		return getClassSchedule(groupId, true);
+	}
+	public List<com.kmutt.cony.model.zombie.Class> getClassSchedule(int groupId, boolean cache) throws Exception {
 		String apiName = "/jsonresponse/get_group_classes/";
 		String method = "POST";
 		
@@ -219,12 +261,23 @@ public class AttendanceAPIZombie {
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
 		param.add(new SimpleEntry<String,Object>("group_id",groupId));
 		
+		//caching
+		if(cache && hasCache(apiName, param)){
+			return (List<com.kmutt.cony.model.zombie.Class>) getCache(apiName, param);
+		}
+				
 		String json = getJson(apiName, method, param);
-		return GSON.fromJson(json, new TypeToken<List<com.kmutt.cony.model.zombie.Class>>() {
+		List<com.kmutt.cony.model.zombie.Class> list = GSON.fromJson(json, new TypeToken<List<com.kmutt.cony.model.zombie.Class>>() {
 		}.getType());
+		
+		saveCache(apiName, param, list);
+		return list;
 	}
 
 	public List<StudentAttendance> getClassScheduleCheckIn(int groupId, int classScheduleId) throws Exception {
+		return getClassScheduleCheckIn( groupId, classScheduleId, true);
+	}
+	public List<StudentAttendance> getClassScheduleCheckIn(int groupId, int classScheduleId, boolean cache) throws Exception {
 		String apiName = "/jsonresponse/get_class_attendance/";
 		String method = "POST";
 		
@@ -234,12 +287,23 @@ public class AttendanceAPIZombie {
 		param.add(new SimpleEntry<String,Object>("group_id",groupId));
 		param.add(new SimpleEntry<String,Object>("class_id",classScheduleId));
 		
+		//caching
+		if(cache && hasCache(apiName, param)){
+			return (List<StudentAttendance>) getCache(apiName, param);
+		}
+				
 		String json = getJson(apiName, method, param);
-		return GSON.fromJson(json, new TypeToken<List<StudentAttendance>>() {
+		List<StudentAttendance> list =  GSON.fromJson(json, new TypeToken<List<StudentAttendance>>() {
 		}.getType());
+		
+		saveCache(apiName, param, list);
+		return list;
 	}
 
 	public List<StudentStat> getStudentList(int groupId) throws Exception {
+		return getStudentList(groupId, true);
+	}
+	public List<StudentStat> getStudentList(int groupId, boolean cache) throws Exception {
 		String apiName = "/jsonresponse/get_group_students/";
 		String method = "POST";
 		
@@ -248,13 +312,26 @@ public class AttendanceAPIZombie {
 		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
 		param.add(new SimpleEntry<String,Object>("group_id",groupId));
 		
+		//caching
+		if(cache && hasCache(apiName, param)){
+			return (List<StudentStat>) getCache(apiName, param);
+		}
+				
 		String json = getJson(apiName, method, param);
-		return GSON.fromJson(json, new TypeToken<List<StudentStat>>() {
+		List<StudentStat> list =  GSON.fromJson(json, new TypeToken<List<StudentStat>>() {
 		}.getType());
+		
+		saveCache(apiName, param, list);
+		return list;
 	}
 	
-	public StudentInfo getStudentInfo(int groupId, int studentId)
+	public StudentInfo getStudentInfo(int groupId, int studentId) throws Exception{
+		return getStudentInfo(groupId, studentId, true);
+	}
+	
+	public StudentInfo getStudentInfo(int groupId, int studentId, boolean cache)
 			throws Exception {
+		
 		String apiName = "/jsonresponse/get_student_info/";
 		String method = "POST";
 		
@@ -264,8 +341,16 @@ public class AttendanceAPIZombie {
 		param.add(new SimpleEntry<String,Object>("group_id",groupId));
 		param.add(new SimpleEntry<String,Object>("student_id",studentId));
 		
+		//caching
+		if(cache && hasCache(apiName, param)){
+			return (StudentInfo) getCache(apiName, param);
+		}
+				
 		String json = getJson(apiName, method, param);
-		return GSON.fromJson(json, StudentInfo.class);
+		StudentInfo obj = GSON.fromJson(json, StudentInfo.class);
+		
+		saveCache(apiName, param, obj);
+		return obj;
 	}
 	
 //	public List<Course> getRegisteredCourse(int studentId) throws Exception {

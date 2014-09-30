@@ -19,12 +19,13 @@ public class TestCallZombieApi{
 	@Before
 	public void init(){
 		mAttendanceAPI = AttendanceAPIZombie.getInstance();
-		mAttendanceAPI.logout();
+//		mAttendanceAPI.logout();
 	}
 	
 	@Test
 	public void testCallApiWithoutAuthentication(){
 		try {
+			mAttendanceAPI.logout();
 			mAttendanceAPI.getMyInfo();
 		} catch (Exception e) {
 			Assert.assertEquals("401",e.getMessage());
@@ -48,6 +49,7 @@ public class TestCallZombieApi{
 	}
 	@Test
 	public void testisLogin_false(){
+		mAttendanceAPI.logout();
 		Assert.assertFalse(mAttendanceAPI.isLogin());
 	}
 	
@@ -133,6 +135,26 @@ public class TestCallZombieApi{
 		Assert.assertEquals("Group of DSD in COlombia", c1g1.getDescription());
 		
 	}
+	
+	@Test
+	public void testGetCourseListWithCache() throws Exception{
+		
+		mAttendanceAPI.logout();
+		long t1 = System.currentTimeMillis();
+		
+		testGetCourseList();
+		
+		long t2 = System.currentTimeMillis();
+		
+		testGetCourseList();
+		
+		long t3 = System.currentTimeMillis();
+		
+		Assert.assertTrue(((t2-t1)/10) > (t3-t2));
+		System.out.println("t1:"+t1);
+		System.out.println("t2:"+t2);
+		System.out.println("t3:"+t3);
+	}
 	@Test
 	public void testGetClassSchedule() throws Exception{
 		List<com.kmutt.cony.model.zombie.Class>list=null;
@@ -157,6 +179,22 @@ public class TestCallZombieApi{
 		Assert.assertEquals(2, c2.getPeriod());
 		Assert.assertEquals("M8-102", c2.getClassRoom());
 		
+	}
+	@Test
+	public void testGetClassScheduleWithCache() throws Exception{
+		
+		mAttendanceAPI.logout();
+		long t1 = System.currentTimeMillis();
+		
+		testGetClassSchedule();
+		
+		long t2 = System.currentTimeMillis();
+		
+		testGetClassSchedule();
+		
+		long t3 = System.currentTimeMillis();
+		
+		Assert.assertTrue(((t2-t1)/10) > (t3-t2));
 	}
 	@Test
 	public void testGetClassScheduleCheckIn() throws Exception{
@@ -185,7 +223,22 @@ public class TestCallZombieApi{
 		Assert.assertEquals("www.twitter.com", s1.getStudent().getTwitter());
 		
 	}
-	
+	@Test
+	public void testGetClassScheduleCheckInWithCache() throws Exception{
+		
+		mAttendanceAPI.logout();
+		long t1 = System.currentTimeMillis();
+		
+		testGetClassScheduleCheckIn();
+		
+		long t2 = System.currentTimeMillis();
+		
+		testGetClassScheduleCheckIn();
+		
+		long t3 = System.currentTimeMillis();
+		
+		Assert.assertTrue(((t2-t1)/10) > (t3-t2));
+	}
 	@Test
 	public void testGetStudentList() throws Exception{
 		List<StudentStat>list=null;
@@ -214,6 +267,22 @@ public class TestCallZombieApi{
 		Assert.assertEquals(1, s1.getAbsent());
 		Assert.assertEquals(1, s1.getLate());
 		Assert.assertEquals(1, s1.getPresent());
+	}
+	@Test
+	public void testGetStudentListWithCache() throws Exception{
+		
+		mAttendanceAPI.logout();
+		long t1 = System.currentTimeMillis();
+		
+		testGetStudentList();
+		
+		long t2 = System.currentTimeMillis();
+		
+		testGetStudentList();
+		
+		long t3 = System.currentTimeMillis();
+		
+		Assert.assertTrue(((t2-t1)/10) > (t3-t2));
 	}
 	@Test
 	public void testStudentInfo() throws Exception{
@@ -256,7 +325,22 @@ public class TestCallZombieApi{
 		Assert.assertEquals(2, c1.getPeriod());
 		Assert.assertEquals("M8-102", c1.getClassRoom());
 	}
-	
+	@Test
+	public void testStudentInfoWithCache() throws Exception{
+		
+		mAttendanceAPI.logout();
+		long t1 = System.currentTimeMillis();
+		
+		testStudentInfo();
+		
+		long t2 = System.currentTimeMillis();
+		
+		testStudentInfo();
+		
+		long t3 = System.currentTimeMillis();
+		
+		Assert.assertTrue(((t2-t1)/10) > (t3-t2));
+	}
 //	@Test
 //	public void testGetRegisteredCourse() throws Exception{
 //		List<Course>list=null;
