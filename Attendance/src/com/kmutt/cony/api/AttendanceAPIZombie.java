@@ -10,20 +10,22 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import org.apache.commons.codec.binary.Base64;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.kmutt.cony.model.zombie.AttendanceResult;
+import com.kmutt.cony.model.zombie.Class;
 import com.kmutt.cony.model.zombie.Course;
+import com.kmutt.cony.model.zombie.StudentAttendanceEntry;
 import com.kmutt.cony.model.zombie.User;
 import com.kmutt.cony.model.zombie.StudentAttendance;
 import com.kmutt.cony.model.zombie.StudentInfo;
@@ -95,33 +97,36 @@ public class AttendanceAPIZombie {
 //	private String getJson(String apiName, String method) throws Exception {
 //		return getJson(apiName, method, null);
 //	}
-	private boolean hasCache(String url,List<Entry<String, Object>> param) throws UnsupportedEncodingException{
+	private boolean hasCache(String url,Object param) throws UnsupportedEncodingException{
 		return cache.containsKey(url + toParamString(param));
 	}
-	private Object getCache(String url,List<Entry<String, Object>> param) throws UnsupportedEncodingException{
+	private Object getCache(String url,Object param) throws UnsupportedEncodingException{
 		return cache.get(url + toParamString(param));
 	}
-	private void saveCache(String url, List<Entry<String, Object>> param, Object obj) throws UnsupportedEncodingException{
+	private void saveCache(String url,Object param, Object obj) throws UnsupportedEncodingException{
 		cache.put(url + toParamString(param), obj);
 	}
-	private String toParamString(List<Entry<String, Object>> params) throws UnsupportedEncodingException{
-		StringBuilder paramData = new StringBuilder();
-		paramData.append('{');
-		for (Entry<String, Object> param : params) {					
-			
-			if (paramData.length() > 1)
-				paramData.append(',');
-			
-			paramData.append("\"").append(URLEncoder.encode(param.getKey(), "UTF-8")).append("\"");
-			paramData.append(":");
-			paramData.append("\"").append(URLEncoder.encode(
-					String.valueOf(param.getValue()), "UTF-8")).append("\"");
-		}
-		paramData.append('}');
-		return paramData.toString();
+//	private static String toParamString(List<Entry<String, Object>> params) throws UnsupportedEncodingException{
+//		StringBuilder paramData = new StringBuilder();
+//		paramData.append("{");
+//		for (Entry<String, Object> param : params) {					
+//			
+//			if (paramData.length() > 1)
+//				paramData.append(',');
+//			
+//			paramData.append("\"").append(URLEncoder.encode(param.getKey(), "UTF-8")).append("\"");
+//			paramData.append(":");
+//			paramData.append("\"").append(URLEncoder.encode(
+//					String.valueOf(param.getValue()), "UTF-8")).append("\"");
+//		}
+//		paramData.append("}");
+//		return paramData.toString();
+//	}
+	private String toParamString(Object params) throws UnsupportedEncodingException{
+		return GSON.toJson(params);
 	}
 	private String getJson(String apiName, String method,
-			List<Entry<String, Object>> params) throws Exception {
+			Object params) throws Exception {
 		URL url = new URL(WEB_PATH + apiName);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod(method);
@@ -206,7 +211,7 @@ public class AttendanceAPIZombie {
 		String apiName = "/jsonresponse/get_user_info";
 		String method = "POST";
 		
-		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
+		Map param = new TreeMap();
 		
 		//caching
 		if(cache && hasCache(apiName, param)){
@@ -234,8 +239,8 @@ public class AttendanceAPIZombie {
 		
 		checkLogin();
 		
-		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
-		param.add(new SimpleEntry<String,Object>("instructor_id", instructor.getUserId()));
+		Map param = new TreeMap();
+		param.put("instructor_id", instructor.getUserId());
 		
 		//caching
 		if(cache && hasCache(apiName, param)){
@@ -258,8 +263,8 @@ public class AttendanceAPIZombie {
 		
 		checkLogin();
 		
-		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
-		param.add(new SimpleEntry<String,Object>("group_id",groupId));
+		Map param = new TreeMap();
+		param.put("group_id",groupId);
 		
 		//caching
 		if(cache && hasCache(apiName, param)){
@@ -283,9 +288,9 @@ public class AttendanceAPIZombie {
 		
 		checkLogin();
 		
-		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
-		param.add(new SimpleEntry<String,Object>("group_id",groupId));
-		param.add(new SimpleEntry<String,Object>("class_id",classScheduleId));
+		Map param = new TreeMap();
+		param.put("group_id",groupId);
+		param.put("class_id",classScheduleId);
 		
 		//caching
 		if(cache && hasCache(apiName, param)){
@@ -309,8 +314,8 @@ public class AttendanceAPIZombie {
 		
 		checkLogin();
 		
-		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
-		param.add(new SimpleEntry<String,Object>("group_id",groupId));
+		Map param = new TreeMap();
+		param.put("group_id",groupId);
 		
 		//caching
 		if(cache && hasCache(apiName, param)){
@@ -337,9 +342,9 @@ public class AttendanceAPIZombie {
 		
 		checkLogin();
 		
-		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
-		param.add(new SimpleEntry<String,Object>("group_id",groupId));
-		param.add(new SimpleEntry<String,Object>("student_id",studentId));
+		Map param = new TreeMap();
+		param.put("group_id",groupId);
+		param.put("student_id",studentId);
 		
 		//caching
 		if(cache && hasCache(apiName, param)){
@@ -375,17 +380,21 @@ public class AttendanceAPIZombie {
 //		return GSON.fromJson(json, Student.class);
 //	}
 //
-//	public ClassSchedule getCurrentClassSchedule(String date, String time)
-//			throws Exception {
-//		String apiName = "/jsonService/getCurrentClassSchedule";
-//		String method = "POST";
-//		List<Entry<String, Object>> param = new ArrayList<Entry<String, Object>>(
-//				2);
-//		param.add(new SimpleEntry<String, Object>("date", date));
-//		param.add(new SimpleEntry<String, Object>("time", time));
-//		String json = getJson(apiName, method, param);
-//		return GSON.fromJson(json, ClassSchedule.class);
-//	}
+	public Class getCurrentClassSchedule(long time)throws Exception {return getCurrentClassSchedule(time,true);}
+	public Class getCurrentClassSchedule(long time,boolean cache)throws Exception {
+		String apiName = "/jsonresponse/get_current_class_schedule/";
+		String method = "POST";	
+		checkLogin();
+		Map param = new TreeMap();
+		param.put("instructor_id", instructor.getUserId());
+		param.put("date_time_seconds",time);
+		if(cache && hasCache(apiName, param))return (Class) getCache(apiName, param);
+		String json = getJson(apiName, method, param);
+		System.out.print(json);
+		Class _class=GSON.fromJson(json,Class.class);
+		saveCache(apiName, param, _class);
+		return _class;
+	}
 //
 //	public User getUserInfo(String faceId) throws Exception {
 //		String apiName = "/GetUserInfo";
@@ -396,4 +405,13 @@ public class AttendanceAPIZombie {
 //		String json = getJson(apiName, method, param);
 //		return GSON.fromJson(json, User.class);
 //	}
+	public AttendanceResult UpdateStudentCheckInStatus(List<StudentAttendanceEntry> attendance) throws Exception{
+		String apiName = "/jsonresponse/update_class_attendance/";
+		String method = "POST";	
+		checkLogin();
+		String json = getJson(apiName, method, attendance);
+		System.out.print(json);
+		AttendanceResult atdResult=GSON.fromJson(json,AttendanceResult.class);
+		return atdResult;
+	}
 }
