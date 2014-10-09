@@ -1,5 +1,6 @@
 package com.kmutt.cony.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
@@ -7,9 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.kmutt.cony.api.AttendanceAPIZombie;
+import com.kmutt.cony.model.zombie.AttendanceResult;
 import com.kmutt.cony.model.zombie.Course;
 import com.kmutt.cony.model.zombie.Groups;
 import com.kmutt.cony.model.zombie.StudentAttendance;
+import com.kmutt.cony.model.zombie.StudentAttendanceEntry;
 import com.kmutt.cony.model.zombie.StudentInfo;
 import com.kmutt.cony.model.zombie.StudentStat;
 import com.kmutt.cony.model.zombie.User;
@@ -340,6 +343,31 @@ public class TestCallZombieApi{
 		long t3 = System.currentTimeMillis();
 		
 		Assert.assertTrue(((t2-t1)/10) > (t3-t2));
+	}
+	@Test
+	public void getCurrentClassSchedule()throws Exception{
+		com.kmutt.cony.model.zombie.Class _class=null;
+		try{
+			_class=mAttendanceAPI.setCredentail("user8","qwe123").getCurrentClassSchedule(1411834905);
+		}catch(Exception ex){
+			System.out.print(ex);
+			Assert.fail();
+		}
+	}
+	@Test
+	public void testUpdateStudentCheckInStatus()throws Exception{
+		List<StudentAttendanceEntry>attendance=new ArrayList<>();
+		attendance.add(new StudentAttendanceEntry(5,1,2));
+		attendance.add(new StudentAttendanceEntry(6,2,2));
+		attendance.add(new StudentAttendanceEntry(7,3,2));
+		AttendanceResult result=null;
+		try{
+			result=mAttendanceAPI.setCredentail("user8","qwe123").updateStudentCheckInStatus(attendance);
+		}catch(Exception ex){
+			System.out.print(ex);
+			Assert.fail();
+		}
+		Assert.assertEquals(attendance.size(),result.getUpdateStatus().size());
 	}
 //	@Test
 //	public void testGetRegisteredCourse() throws Exception{

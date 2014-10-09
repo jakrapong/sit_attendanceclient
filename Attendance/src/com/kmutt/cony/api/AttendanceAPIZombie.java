@@ -1,5 +1,6 @@
 package com.kmutt.cony.api;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -10,10 +11,12 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.TreeMap;
 
@@ -125,6 +128,19 @@ public class AttendanceAPIZombie {
 	private String toParamString(Object params) throws UnsupportedEncodingException{
 		return GSON.toJson(params);
 	}
+	private String toParamString2(List<Entry<String,Object>> params){
+     	StringBuilder paramData=new StringBuilder();
+     	for(Entry<String,Object>param:params){
+     		if(paramData.length()!=0)paramData.append('&');
+     		paramData.append(param.getKey());
+			paramData.append("=");
+     		try {
+				paramData.append(URLEncoder.encode(String.valueOf(param.getValue()),"UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				paramData.append(String.valueOf(param.getValue()));
+			}
+     	}return paramData.toString();
+	}
 	private String getJson(String apiName, String method,
 			Object params) throws Exception {
 		URL url = new URL(WEB_PATH + apiName);
@@ -152,6 +168,63 @@ public class AttendanceAPIZombie {
 			
 			connection.setDoOutput(true);
 			
+			DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+			out.writeBytes(paramData);
+			out.flush();
+			out.close();
+		}
+		InputStream content = null;
+		try {
+			content = (InputStream) connection.getInputStream();
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					content));
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = in.readLine()) != null)
+				sb.append(line);
+			return sb.toString();
+		} catch (IOException ex) {
+			
+//			ex.printStackTrace();
+			
+			String msg = ex.getMessage();
+			String s = "HTTP response code: ";
+			int i = msg.indexOf(s);
+			if (i != -1) {
+				int j = msg.indexOf(" for URL: ");
+				throw new Exception(msg.substring(i + s.length(), j));
+			} else {
+				throw ex;
+			}
+		}finally{
+			if(content != null)
+				content.close();
+			connection.disconnect();
+		}
+	}
+	
+	private String getJson2(String apiName, String method,
+			List<Entry<String,Object>> params) throws Exception {
+		URL url = new URL(WEB_PATH + apiName);
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setRequestMethod(method);
+		connection.setDoOutput(true);
+		connection.setRequestProperty("charset", "utf-8");
+		if (username != null && password != null) {
+			String authStr = username + ":" + password;
+			String authEncoded = new String(Base64.encodeBase64(authStr
+					.getBytes()));
+			connection.setRequestProperty("Authorization", "Basic "
+					+ authEncoded);
+		}		
+		System.out.print("\ncall " + apiName);		
+		if (params != null) {
+			String paramData = toParamString2(params);
+			System.out.println(", data:" + paramData);
+			byte[] paramDataBytes = paramData.toString().getBytes("UTF-8");
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.setRequestProperty("Content-Length",""+paramData.getBytes().length);
+			connection.getOutputStream().write(paramDataBytes);
 			DataOutputStream out = new DataOutputStream(connection.getOutputStream());
 			out.writeBytes(paramData);
 			out.flush();
@@ -385,11 +458,11 @@ public class AttendanceAPIZombie {
 		String apiName = "/jsonresponse/get_current_class_schedule/";
 		String method = "POST";	
 		checkLogin();
-		Map param = new TreeMap();
-		param.put("instructor_id", instructor.getUserId());
-		param.put("date_time_seconds",time);
+		List<Entry<String,Object>>param=new ArrayList<>();
+		param.add(new SimpleEntry<String,Object>("instructor_id", instructor.getUserId()));
+		param.add(new SimpleEntry<String,Object>("date_time_seconds",time));
 		if(cache && hasCache(apiName, param))return (Class) getCache(apiName, param);
-		String json = getJson(apiName, method, param);
+		String json = getJson2(apiName, method, param);
 		System.out.print(json);
 		Class _class=GSON.fromJson(json,Class.class);
 		saveCache(apiName, param, _class);
@@ -405,7 +478,7 @@ public class AttendanceAPIZombie {
 //		String json = getJson(apiName, method, param);
 //		return GSON.fromJson(json, User.class);
 //	}
-	public AttendanceResult UpdateStudentCheckInStatus(List<StudentAttendanceEntry> attendance) throws Exception{
+	public AttendanceResult updateStudentCheckInStatus(List<StudentAttendanceEntry> attendance) throws Exception{
 		String apiName = "/jsonresponse/update_class_attendance/";
 		String method = "POST";	
 		checkLogin();

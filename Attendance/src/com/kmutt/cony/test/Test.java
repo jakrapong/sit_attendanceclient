@@ -13,10 +13,17 @@ import com.kmutt.cony.api.AttendanceAPIZombie;
 import com.kmutt.cony.model.zombie.Class;
 import com.kmutt.cony.model.zombie.StudentAttendanceEntry;
 import com.kmutt.cony.model.zombie.StudentInfo;
+import com.kmutt.cony.model.zombie.StudentStat;
 
 public class Test {
+	/**
+	 * @param arg
+	 * @throws Exception
+	 */
 	public static void main(String[]arg) throws Exception{
-
-		System.out.print(new Gson().toJson(new StudentAttendanceEntry()));
+		for(StudentStat std:AttendanceAPIZombie.getInstance().setCredentail("user8","qwe123").getStudentList(2,false)){
+			System.out.println(std.getUserId()+",");
+		}
+		
 	}
 }

@@ -9,6 +9,12 @@ public class StudentAttendanceEntry {
 	private Integer classId;
 	private Integer updateStatus;
 	public StudentAttendanceEntry() {}
+	public StudentAttendanceEntry(int userId, Integer status, Integer classId) {
+		super();
+		this.userId = userId;
+		this.status = status;
+		this.classId = classId;
+	}
 	public int getUserId() {
 		return userId;
 	}
@@ -33,5 +39,4 @@ public class StudentAttendanceEntry {
 	public void setUpdateStatus(Integer updateStatus) {
 		this.updateStatus = updateStatus;
 	}
-	
 }
