@@ -348,77 +348,76 @@ public class TestCallZombieApi{
 	public void getCurrentClassSchedule()throws Exception{
 		com.kmutt.cony.model.zombie.Class _class=null;
 		try{
-			_class=mAttendanceAPI.setCredentail("user8","qwe123").getCurrentClassSchedule(1411834905);
+			_class=mAttendanceAPI.setCredentail("user8","qwe123").getCurrentClassSchedule(1412578792);
+			
+			
 		}catch(Exception ex){
 			System.out.print(ex);
 			Assert.fail();
 		}
+		
+		Assert.assertNotNull(_class);
 	}
 	
-//	ปิดไปเฉยๆ กลัวตอนมันรันแล้วยัดข้อมูลลง DB เยอะเกิน แต่มันทำงานได้ปกตินะ
-//	@Test
-//	public void testUpdateStudentCheckInStatus()throws Exception{
-//		List<StudentAttendanceEntry>attendance=new ArrayList<>();
-//		attendance.add(new StudentAttendanceEntry(5,1,2));
-//		attendance.add(new StudentAttendanceEntry(6,2,2));
-//		attendance.add(new StudentAttendanceEntry(7,3,2));
-//		AttendanceResult result=null;
-//		try{
-//			result=mAttendanceAPI.setCredentail("user8","qwe123").updateStudentCheckInStatus(attendance);
-//		}catch(Exception ex){
-//			System.out.print(ex);
-//			Assert.fail();
-//		}
-//		Assert.assertEquals(attendance.size(),result.getUpdateStatus().size());
-//	}
-	
-	
-	
-	
-//	@Test
-//	public void testGetRegisteredCourse() throws Exception{
-//		List<Course>list=null;
-//		try{
-//			list=mAttendanceAPI.setCredentail("user8","qwe123").getRegisteredCourse(1);
-//		}catch(Exception ex){
-//			System.out.print(ex);
-//			Assert.fail();
-//		}
-//		Assert.assertNotNull(list);
-//		Assert.assertEquals(4, list.size());
-//	}
-	
-//	@Test
-//	public void testGetStudentListWith2Param() throws Exception{
-//		Statistic student=null;
-//		try{
-//			student=mAttendanceAPI.setCredentail("user8","qwe123").getStudentInfo("S0001",1);
-//		}catch(Exception ex){}
-//		Assert.assertNotNull(student);
-//	}
-//	@Test
-//	public void testGetStudentListWith1Param() throws Exception{
-//		Student student=null;
-//		try{
-//			student=mAttendanceAPI.setCredentail("user8","qwe123").getStudentInfo("S0001");
-//		}catch(Exception ex){}
-//		Assert.assertNotNull(student);
-//	}
-//	@Test
-//	public void testGetCurrentClassSchedule() throws Exception{
-//		ClassSchedule classScd=null;
-//		try{
-//			classScd=mAttendanceAPI.setCredentail("user8","qwe123").getCurrentClassSchedule("09092014","1600");
-//		}catch(Exception ex){}
-//		Assert.assertNotNull(classScd);
-//	}
-//	@Test
-//	public void testGetCurrentClassScheduleWithNoClass() throws Exception{
-//		ClassSchedule classScd=null;
-//		try{
-//			classScd=mAttendanceAPI.setCredentail("user8","qwe123").getCurrentClassSchedule("09092014","0000");
-//		}catch(Exception ex){}
-//		Assert.assertNull(classScd);
-//	}
+	@Test
+	public void getCurrentClassSchedule_TimeBetweenClass()throws Exception{
+		com.kmutt.cony.model.zombie.Class _class=null;
+		try{
+			_class=mAttendanceAPI.setCredentail("user8","qwe123").getCurrentClassSchedule(1412578795);
+		}catch(Exception ex){
+			System.out.print(ex);
+			Assert.fail();
+		}
+		
+		Assert.assertNotNull(_class);
+	}
 
+	@Test
+	public void getUpdateStatus()throws Exception{
+		
+		StudentAttendanceEntry st1 = new StudentAttendanceEntry();
+		st1.setClassId(1);
+		st1.setUserId(1);
+		st1.setStatus(StudentAttendance.STATUS_PRESENT);
+		
+		StudentAttendanceEntry st2 = new StudentAttendanceEntry();
+		st2.setClassId(1);
+		st2.setUserId(2);
+		st2.setStatus(StudentAttendance.STATUS_ABSENCE);
+		
+		StudentAttendanceEntry st3 = new StudentAttendanceEntry();
+		st3.setClassId(1);
+		st3.setUserId(3);
+		st3.setStatus(StudentAttendance.STATUS_LATT);
+		
+		ArrayList<StudentAttendanceEntry> stList = new ArrayList<StudentAttendanceEntry>();
+		stList.add(st1);
+		stList.add(st2);
+		stList.add(st3);
+		
+		try{
+			AttendanceResult result = mAttendanceAPI.setCredentail("user8","qwe123").updateStudentCheckInStatus(stList);
+			
+			Assert.assertNotNull(result);
+			Assert.assertTrue(result.getStatistic().getAbsent() >= 1);
+			Assert.assertTrue(result.getStatistic().getPresent() >= 1);
+			Assert.assertTrue(result.getStatistic().getLate() >= 1);
+			
+			st1.setStatus(StudentAttendance.STATUS_PRESENT);
+			st2.setStatus(StudentAttendance.STATUS_PRESENT);
+			st3.setStatus(StudentAttendance.STATUS_PRESENT);
+			
+			result = mAttendanceAPI.setCredentail("user8","qwe123").updateStudentCheckInStatus(stList);
+			
+			Assert.assertNotNull(result);
+			Assert.assertTrue(result.getStatistic().getPresent() >= 3);
+			
+			
+		
+		}catch(Exception ex){
+			System.out.print(ex);
+			Assert.fail();
+		}
+		
+	}
 }

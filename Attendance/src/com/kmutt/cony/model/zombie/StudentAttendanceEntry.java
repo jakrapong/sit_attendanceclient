@@ -4,13 +4,16 @@ package com.kmutt.cony.model.zombie;
 public class StudentAttendanceEntry {
 	@com.google.gson.annotations.SerializedName("user_id")
 	private int userId;
-	private Integer status;
+	private int status;
 	@com.google.gson.annotations.SerializedName("class_id")
-	private Integer classId;
-	private Integer updateStatus;
-	public StudentAttendanceEntry() {}
+	private int classId;
+	private int updateStatus;
+	
+	public StudentAttendanceEntry() {
+		
+	}
+	
 	public StudentAttendanceEntry(int userId, Integer status, Integer classId) {
-		super();
 		this.userId = userId;
 		this.status = status;
 		this.classId = classId;

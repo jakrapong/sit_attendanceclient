@@ -130,8 +130,14 @@ public class AttendanceAPIZombie {
 	}
 	private String toParamString2(List<Entry<String,Object>> params){
      	StringBuilder paramData=new StringBuilder();
+     	
      	for(Entry<String,Object>param:params){
-     		if(paramData.length()!=0)paramData.append('&');
+     		
+     		if(paramData.length()!=0)
+     			paramData.append('&');
+     		else
+     			paramData.append('?');
+     		
      		paramData.append(param.getKey());
 			paramData.append("=");
      		try {
@@ -185,7 +191,7 @@ public class AttendanceAPIZombie {
 			return sb.toString();
 		} catch (IOException ex) {
 			
-//			ex.printStackTrace();
+			ex.printStackTrace();
 			
 			String msg = ex.getMessage();
 			String s = "HTTP response code: ";
@@ -205,6 +211,12 @@ public class AttendanceAPIZombie {
 	
 	private String getJson2(String apiName, String method,
 			List<Entry<String,Object>> params) throws Exception {
+		
+		if(params != null){
+			String paramData = toParamString2(params);
+			apiName += paramData;
+		}
+		
 		URL url = new URL(WEB_PATH + apiName);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod(method);
@@ -218,18 +230,18 @@ public class AttendanceAPIZombie {
 					+ authEncoded);
 		}		
 		System.out.print("\ncall " + apiName);		
-		if (params != null) {
-			String paramData = toParamString2(params);
-			System.out.println(", data:" + paramData);
-			byte[] paramDataBytes = paramData.toString().getBytes("UTF-8");
+//		if (params != null) {
+//			String paramData = toParamString2(params);
+//			System.out.println(", data:" + paramData);
+//			byte[] paramDataBytes = paramData.toString().getBytes("UTF-8");
 			connection.setRequestProperty("Content-Type", "application/json");
-			connection.setRequestProperty("Content-Length",""+paramData.getBytes().length);
-			connection.getOutputStream().write(paramDataBytes);
+			connection.setRequestProperty("Content-Length","0");
+//			connection.getOutputStream().write(paramDataBytes);
 			DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-			out.writeBytes(paramData);
+//			out.writeBytes(paramData);
 			out.flush();
 			out.close();
-		}
+//		}
 		InputStream content = null;
 		try {
 			content = (InputStream) connection.getInputStream();
@@ -242,7 +254,7 @@ public class AttendanceAPIZombie {
 			return sb.toString();
 		} catch (IOException ex) {
 			
-//			ex.printStackTrace();
+			ex.printStackTrace();
 			
 			String msg = ex.getMessage();
 			String s = "HTTP response code: ";
