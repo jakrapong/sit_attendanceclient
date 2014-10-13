@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 public class StudentAttendance  implements Serializable{
 	
+	public static int STATUS_NA = 0;
 	public static int STATUS_PRESENT = 1;
 	public static int STATUS_LATT = 2;
 	public static int STATUS_ABSENCE = 3;
