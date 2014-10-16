@@ -6,25 +6,26 @@ import java.io.Serializable;
 
 public class User implements Serializable{
 	
-	public static int TYPE_INSTRUCTOR = 0;
-	public static int TYPE_STUDENT = 1;
+	public static final int TYPE_INSTRUCTOR = 0;
+	public static final int TYPE_STUDENT = 1;
 	
-	public static int GENDER_MALE = 0;
-	public static int GENDER_FEMALE = 1;
+	public static final int GENDER_MALE = 0;
+	public static final int GENDER_FEMALE = 1;
 	
+	private int userId;
+	private String predefineId;
+	private String nickname;
+	private int type;
+	private String lastName;
    	private String firstName;
    	private int gender;
-   	private String lastName;
    	private String photo;
-   	private int userId;
-   	private int type;
+   	private String telephone;
+   	private String facebook;
+   	private String address;
+   	private String twitter;
+   	private String email;
 
-    private String address;
-    private String telephone;
-    private String email;
-    private String facebook;
-    private String twitter;
-    
     public User(){
     	type = -1;
     }
@@ -100,4 +101,23 @@ public class User implements Serializable{
 	public void setTwitter(String twitter) {
 		this.twitter = twitter;
 	}
+	public String getPredefineId() {
+		return predefineId;
+	}
+	public void setPredefineId(String predefineId) {
+		this.predefineId = predefineId;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public String getTelephone() {
+		return telephone;
+	}
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+	
 }

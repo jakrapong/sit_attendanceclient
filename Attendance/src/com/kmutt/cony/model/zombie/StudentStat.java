@@ -5,21 +5,23 @@ import java.io.Serializable;
 
 
 public class StudentStat implements Serializable{
-   	private int absent;
-   	private String firstName;
-   	private int gender;
-   	private String lastName;
-   	private int late;
-   	private String photo;
-   	private int present;
-   	private int userId;
-   	
-   	private String address;
-    private String telephone;
-    private String email;
-    private String facebook;
+	private int userId;
+	private String predefinedId;
+	private String nickname;
+	private int type;
+	private String lastName;
+	private String firstName;
+	private int gender;
+	private String photo;
+	private String telephone;
+	private String facebook;
+	private String address;
     private String twitter;
-
+    private String email;
+    private int present;
+    private int late;
+   	private int absent;
+   	
  	public int getAbsent(){
 		return this.absent;
 	}
@@ -99,4 +101,29 @@ public class StudentStat implements Serializable{
 	public void setTwitter(String twitter) {
 		this.twitter = twitter;
 	}
+	public String getPredefinedId() {
+		return predefinedId;
+	}
+	public void setPredefinedId(String predefinedId) {
+		this.predefinedId = predefinedId;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+	public String getTelephone() {
+		return telephone;
+	}
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+	
 }
