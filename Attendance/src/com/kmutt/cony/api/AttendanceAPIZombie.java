@@ -442,6 +442,19 @@ public class AttendanceAPIZombie {
 		saveCache(apiName, param, obj);
 		return obj;
 	}
+	public User getUserProfile(int userId)throws Exception{return getUserProfile(userId,true);}
+	public User getUserProfile(int userId,boolean cache) throws Exception{
+		String apiName = "/jsonresponse/get_user_profile/";
+		String method = "POST";	
+		Map param = new TreeMap();
+		param.put("user_id",userId);
+		//caching
+		if(cache && hasCache(apiName, param))return(User)getCache(apiName, param);		
+		String json = getJson(apiName, method, param);
+		User obj = GSON.fromJson(json, User.class);
+		saveCache(apiName, param, obj);
+		return obj;
+	}
 	
 //	public List<Course> getRegisteredCourse(int studentId) throws Exception {
 //		String apiName = "/jsonresponse/get_student_registered_courses/";

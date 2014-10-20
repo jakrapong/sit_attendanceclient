@@ -13,7 +13,7 @@ public class User implements Serializable{
 	public static final int GENDER_FEMALE = 1;
 	
 	private int userId;
-	private String predefineId;
+	private String predefinedId;
 	private String nickname;
 	private int type;
 	private String lastName;
@@ -101,11 +101,11 @@ public class User implements Serializable{
 	public void setTwitter(String twitter) {
 		this.twitter = twitter;
 	}
-	public String getPredefineId() {
-		return predefineId;
+	public String getPredefinedId() {
+		return predefinedId;
 	}
-	public void setPredefineId(String predefineId) {
-		this.predefineId = predefineId;
+	public void setPredefinedId(String predefinedId) {
+		this.predefinedId = predefinedId;
 	}
 	public String getNickname() {
 		return nickname;
@@ -118,6 +118,15 @@ public class User implements Serializable{
 	}
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
+	}
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", predefinedId=" + predefinedId
+				+ ", nickname=" + nickname + ", type=" + type + ", lastName="
+				+ lastName + ", firstName=" + firstName + ", gender=" + gender
+				+ ", photo=" + photo + ", telephone=" + telephone
+				+ ", facebook=" + facebook + ", address=" + address
+				+ ", twitter=" + twitter + ", email=" + email + "]";
 	}
 	
 }

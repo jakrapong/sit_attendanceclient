@@ -14,6 +14,7 @@ import com.kmutt.cony.model.zombie.Class;
 import com.kmutt.cony.model.zombie.StudentAttendanceEntry;
 import com.kmutt.cony.model.zombie.StudentInfo;
 import com.kmutt.cony.model.zombie.StudentStat;
+import com.kmutt.cony.model.zombie.User;
 
 public class Test {
 	/**
@@ -21,9 +22,8 @@ public class Test {
 	 * @throws Exception
 	 */
 	public static void main(String[]arg) throws Exception{
-		for(StudentStat std:AttendanceAPIZombie.getInstance().setCredentail("user8","qwe123").getStudentList(2,false)){
-			System.out.println(std.getUserId()+",");
-		}
+		User user=AttendanceAPIZombie.getInstance().getUserProfile(8,false);
+		System.out.print(user);
 		
 	}
 }

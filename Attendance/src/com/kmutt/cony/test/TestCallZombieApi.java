@@ -418,6 +418,29 @@ public class TestCallZombieApi{
 			System.out.print(ex);
 			Assert.fail();
 		}
-		
+	}
+	@Test
+	public void getUserInfo()throws Exception{
+		User user=null;
+		try{
+			user=mAttendanceAPI.getUserProfile(8);
+		}catch(Exception ex){
+			System.out.print(ex);
+			Assert.fail();
+		}
+		Assert.assertNotNull(user);
+		Assert.assertEquals(8,user.getUserId());
+		Assert.assertEquals("UNAL-1032", user.getPredefinedId());
+		Assert.assertEquals("no-nickname", user.getNickname());
+		Assert.assertEquals(0, user.getType());
+		Assert.assertEquals("Carlos", user.getFirstName());
+		Assert.assertEquals("Zapata", user.getLastName());
+		Assert.assertEquals("ADDDress", user.getAddress());
+		Assert.assertEquals(0, user.getGender());
+		Assert.assertEquals("http://gala.ie.st/face.png", user.getPhoto());
+		Assert.assertEquals("12345788", user.getPhoneNumber());
+		Assert.assertEquals("www.facebook.com", user.getFacebook());
+		Assert.assertEquals("www.twitter.com", user.getTwitter());
+		Assert.assertEquals("Zapata@gmail.com", user.getEmail());
 	}
 }
