@@ -5,34 +5,42 @@ import java.io.Serializable;
 
 
 public class Class implements Serializable{
+	private int status;
    	private int classId;
 //   	private Date datetime;
    	private long datetimeSeconds;
+   	private String description;
    	private int period;
    	private String classRoom;
-
- 	public int getClassId(){
-		return this.classId;
+   	private Course course;
+	public int getStatus() {
+		return status;
 	}
-	public void setClassId(int classId){
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public int getClassId() {
+		return classId;
+	}
+	public void setClassId(int classId) {
 		this.classId = classId;
 	}
-// 	public Date getDatetime(){
-//		return this.datetime;
-//	}
-//	public void setDatetime(Date datetime){
-//		this.datetime = datetime;
-//	}
- 	public long getDatetimeSeconds(){
-		return this.datetimeSeconds;
+	public long getDatetimeSeconds() {
+		return datetimeSeconds;
 	}
-	public void setDatetimeSeconds(long datetimeSeconds){
+	public void setDatetimeSeconds(long datetimeSeconds) {
 		this.datetimeSeconds = datetimeSeconds;
 	}
- 	public int getPeriod(){
-		return this.period;
+	public String getDescription() {
+		return description;
 	}
-	public void setPeriod(int period){
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public int getPeriod() {
+		return period;
+	}
+	public void setPeriod(int period) {
 		this.period = period;
 	}
 	public String getClassRoom() {
@@ -41,4 +49,12 @@ public class Class implements Serializable{
 	public void setClassRoom(String classRoom) {
 		this.classRoom = classRoom;
 	}
+	public Course getCourse() {
+		return course;
+	}
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+   	
+
 }

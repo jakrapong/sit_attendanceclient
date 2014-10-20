@@ -9,24 +9,17 @@ public class Course implements Serializable{
    	private String courseName;
    	private String courseSemester;
    	private List<Groups> groups;
-
- 	public int getCourseId(){
-		return this.courseId;
+	public int getCourseId() {
+		return courseId;
 	}
-	public void setCourseId(int courseId){
+	public void setCourseId(int courseId) {
 		this.courseId = courseId;
 	}
- 	public String getCourseName(){
-		return this.courseName;
+	public String getCourseName() {
+		return courseName;
 	}
-	public void setCourseName(String courseName){
+	public void setCourseName(String courseName) {
 		this.courseName = courseName;
-	}
- 	public List<Groups> getGroups(){
-		return this.groups;
-	}
-	public void setGroups(List<Groups> groups){
-		this.groups = groups;
 	}
 	public String getCourseSemester() {
 		return courseSemester;
@@ -34,4 +27,11 @@ public class Course implements Serializable{
 	public void setCourseSemester(String courseSemester) {
 		this.courseSemester = courseSemester;
 	}
+	public List<Groups> getGroups() {
+		return groups;
+	}
+	public void setGroups(List<Groups> groups) {
+		this.groups = groups;
+	}
+   	
 }
