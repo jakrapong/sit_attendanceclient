@@ -1,6 +1,7 @@
 package com.kmutt.cony.test;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.AbstractMap.SimpleEntry;
@@ -22,8 +23,7 @@ public class Test {
 	 * @throws Exception
 	 */
 	public static void main(String[]arg) throws Exception{
-		User user=AttendanceAPIZombie.getInstance().getUserProfile(8,false);
-		System.out.print(user);
+		System.out.print(AttendanceAPIZombie.getInstance().setCredentail("user8","qwe123").getCurrentClassSchedule());
 		
 	}
 }

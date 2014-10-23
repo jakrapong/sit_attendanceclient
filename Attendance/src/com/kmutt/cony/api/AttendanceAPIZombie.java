@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -493,16 +494,22 @@ public class AttendanceAPIZombie {
 		saveCache(apiName, param, _class);
 		return _class;
 	}
-//
-//	public User getUserInfo(String faceId) throws Exception {
-//		String apiName = "/GetUserInfo";
-//		String method = "POST";
-//		List<Entry<String, Object>> param = new ArrayList<Entry<String, Object>>(
-//				1);
-//		param.add(new SimpleEntry<String, Object>("faceId", faceId));
-//		String json = getJson(apiName, method, param);
-//		return GSON.fromJson(json, User.class);
-//	}
+	public Class getCurrentClassSchedule(){
+		long addSecond=15*60;
+		long time=new Date().getTime()/1000;
+		Class currentClass=null;
+		try {
+			currentClass=getCurrentClassSchedule(time);
+		} catch (Exception e) {
+			System.out.println("class in current time not found.");
+			try {
+				currentClass=getCurrentClassSchedule(time+addSecond);
+			} catch (Exception e1) {
+				System.out.println("class in current time  "+addSecond/60.0+" minutes not found.");
+			}
+		}return currentClass;
+	}
+
 	public AttendanceResult updateStudentCheckInStatus(List<StudentAttendanceEntry> attendance) throws Exception{
 		String apiName = "/jsonresponse/update_class_attendance/";
 		String method = "POST";	
