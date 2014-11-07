@@ -25,4 +25,10 @@ public class StudentAttendance  implements Serializable{
 	public void setStudent(User student){
 		this.student = student;
 	}
+	@Override
+	public String toString() {
+		return "StudentAttendance [checkInStatus=" + checkInStatus
+				+ ", student=" + student + "]";
+	}
+	
 }

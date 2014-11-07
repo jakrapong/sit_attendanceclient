@@ -27,4 +27,10 @@ public class Statistic  implements Serializable{
 	public void setPresent(int present){
 		this.present = present;
 	}
+	@Override
+	public String toString() {
+		return "Statistic [absent=" + absent + ", late=" + late + ", present="
+				+ present + "]";
+	}
+	
 }

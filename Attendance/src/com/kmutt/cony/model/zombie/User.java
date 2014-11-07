@@ -121,12 +121,7 @@ public class User implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", predefinedId=" + predefinedId
-				+ ", nickname=" + nickname + ", type=" + type + ", lastName="
-				+ lastName + ", firstName=" + firstName + ", gender=" + gender
-				+ ", photo=" + photo + ", telephone=" + telephone
-				+ ", facebook=" + facebook + ", address=" + address
-				+ ", twitter=" + twitter + ", email=" + email + "]";
+		return "User [userId=" + userId + " firstName=" + firstName + "]";
 	}
 	
 }

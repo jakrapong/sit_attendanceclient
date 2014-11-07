@@ -10,8 +10,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +39,7 @@ import com.kmutt.cony.model.zombie.StudentStat;
 
 public class AttendanceAPIZombie {
 	public static final String WEB_PATH = "http://gala.cs.iastate.edu:3000";
-
+	private static Map<Integer,AttendanceResult>attendanceCache;
 	private static String credentialFile = "credential.dat";
 	private static String credentialFilePath = ".";
 	private static AttendanceAPIZombie instance;
@@ -126,7 +128,7 @@ public class AttendanceAPIZombie {
 //		paramData.append("}");
 //		return paramData.toString();
 //	}
-	private String toParamString(Object params) throws UnsupportedEncodingException{
+	private String toParamString(Object params){
 		return GSON.toJson(params);
 	}
 	private String toParamString2(List<Entry<String,Object>> params){
@@ -149,7 +151,7 @@ public class AttendanceAPIZombie {
      	}return paramData.toString();
 	}
 	private String getJson(String apiName, String method,
-			Object params) throws Exception {
+			Object params) throws SocketTimeoutException,UnknownHostException,Exception {
 		URL url = new URL(WEB_PATH + apiName);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod(method);
@@ -190,8 +192,11 @@ public class AttendanceAPIZombie {
 			while ((line = in.readLine()) != null)
 				sb.append(line);
 			return sb.toString();
-		} catch (IOException ex) {
-			
+		}catch(UnknownHostException ex){
+			throw ex;
+		}catch(SocketTimeoutException ex){
+			throw ex;
+		}catch (IOException ex) {
 			ex.printStackTrace();
 			
 			String msg = ex.getMessage();
@@ -211,7 +216,7 @@ public class AttendanceAPIZombie {
 	}
 	
 	private String getJson2(String apiName, String method,
-			List<Entry<String,Object>> params) throws Exception {
+			List<Entry<String,Object>> params) throws SocketTimeoutException,UnknownHostException,Exception {
 		
 		if(params != null){
 			String paramData = toParamString2(params);
@@ -231,18 +236,11 @@ public class AttendanceAPIZombie {
 					+ authEncoded);
 		}		
 		System.out.print("\ncall " + apiName);		
-//		if (params != null) {
-//			String paramData = toParamString2(params);
-//			System.out.println(", data:" + paramData);
-//			byte[] paramDataBytes = paramData.toString().getBytes("UTF-8");
-			connection.setRequestProperty("Content-Type", "application/json");
-			connection.setRequestProperty("Content-Length","0");
-//			connection.getOutputStream().write(paramDataBytes);
-			DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-//			out.writeBytes(paramData);
-			out.flush();
-			out.close();
-//		}
+		connection.setRequestProperty("Content-Type", "application/json");
+		connection.setRequestProperty("Content-Length","0");
+		DataOutputStream out = new DataOutputStream(connection.getOutputStream());			
+		out.flush();
+		out.close();
 		InputStream content = null;
 		try {
 			content = (InputStream) connection.getInputStream();
@@ -253,7 +251,9 @@ public class AttendanceAPIZombie {
 			while ((line = in.readLine()) != null)
 				sb.append(line);
 			return sb.toString();
-		} catch (IOException ex) {
+		} catch(SocketTimeoutException|UnknownHostException ex){
+			throw ex;
+		}catch (IOException ex) {
 			
 			ex.printStackTrace();
 			
@@ -273,7 +273,7 @@ public class AttendanceAPIZombie {
 		}
 	}
 	
-	private void checkLogin() throws Exception{
+	private void checkLogin() throws SocketTimeoutException,UnknownHostException,Exception{
 		if(instructor == null || instructor.getType() != User.TYPE_INSTRUCTOR)
 			getMyInfo();
 	}
@@ -290,10 +290,10 @@ public class AttendanceAPIZombie {
 		f.delete();
 	}
 	
-	public User getMyInfo() throws Exception {
+	public User getMyInfo() throws SocketTimeoutException,UnknownHostException,Exception {
 		return getMyInfo(true);
 	}
-	public User getMyInfo(boolean cache) throws Exception {
+	public User getMyInfo(boolean cache) throws SocketTimeoutException,UnknownHostException,Exception {
 		String apiName = "/jsonresponse/get_user_info";
 		String method = "POST";
 		
@@ -316,10 +316,10 @@ public class AttendanceAPIZombie {
 		return instructor;
 	}
 
-	public List<Course> getCourseList() throws Exception {
+	public List<Course> getCourseList() throws SocketTimeoutException,UnknownHostException,Exception {
 		return getCourseList(true);
 	}
-	public List<Course> getCourseList(boolean cache) throws Exception {
+	public List<Course> getCourseList(boolean cache) throws SocketTimeoutException,UnknownHostException,Exception {
 		String apiName = "/jsonresponse/get_instructor_groups/";
 		String method = "POST";
 		
@@ -340,10 +340,10 @@ public class AttendanceAPIZombie {
 		return list;
 	}
 
-	public List<com.kmutt.cony.model.zombie.Class> getClassSchedule(int groupId) throws Exception {
+	public List<com.kmutt.cony.model.zombie.Class> getClassSchedule(int groupId) throws SocketTimeoutException,UnknownHostException,Exception {
 		return getClassSchedule(groupId, true);
 	}
-	public List<com.kmutt.cony.model.zombie.Class> getClassSchedule(int groupId, boolean cache) throws Exception {
+	public List<com.kmutt.cony.model.zombie.Class> getClassSchedule(int groupId, boolean cache) throws SocketTimeoutException,UnknownHostException,Exception {
 		String apiName = "/jsonresponse/get_group_classes/";
 		String method = "POST";
 		
@@ -365,17 +365,16 @@ public class AttendanceAPIZombie {
 		return list;
 	}
 
-	public List<StudentAttendance> getClassScheduleCheckIn(int groupId, int classScheduleId) throws Exception {
-		return getClassScheduleCheckIn( groupId, classScheduleId, true);
+	public List<StudentAttendance> getClassScheduleCheckIn(int classScheduleId) throws SocketTimeoutException,UnknownHostException,Exception {
+		return getClassScheduleCheckIn(classScheduleId, true);
 	}
-	public List<StudentAttendance> getClassScheduleCheckIn(int groupId, int classScheduleId, boolean cache) throws Exception {
+	public List<StudentAttendance> getClassScheduleCheckIn(int classScheduleId, boolean cache) throws SocketTimeoutException,UnknownHostException,Exception {
 		String apiName = "/jsonresponse/get_class_attendance/";
 		String method = "POST";
 		
 		checkLogin();
 		
 		Map param = new TreeMap();
-		param.put("group_id",groupId);
 		param.put("class_id",classScheduleId);
 		
 		//caching
@@ -391,10 +390,10 @@ public class AttendanceAPIZombie {
 		return list;
 	}
 
-	public List<StudentStat> getStudentList(int groupId) throws Exception {
+	public List<StudentStat> getStudentList(int groupId) throws SocketTimeoutException,UnknownHostException,Exception {
 		return getStudentList(groupId, true);
 	}
-	public List<StudentStat> getStudentList(int groupId, boolean cache) throws Exception {
+	public List<StudentStat> getStudentList(int groupId, boolean cache) throws SocketTimeoutException,UnknownHostException,Exception {
 		String apiName = "/jsonresponse/get_group_students/";
 		String method = "POST";
 		
@@ -416,12 +415,11 @@ public class AttendanceAPIZombie {
 		return list;
 	}
 	
-	public StudentInfo getStudentInfo(int groupId, int studentId) throws Exception{
+	public StudentInfo getStudentInfo(int groupId, int studentId) throws SocketTimeoutException,UnknownHostException,Exception{
 		return getStudentInfo(groupId, studentId, true);
 	}
 	
-	public StudentInfo getStudentInfo(int groupId, int studentId, boolean cache)
-			throws Exception {
+	public StudentInfo getStudentInfo(int groupId, int studentId, boolean cache)throws SocketTimeoutException,UnknownHostException,Exception{
 		
 		String apiName = "/jsonresponse/get_student_info/";
 		String method = "POST";
@@ -443,8 +441,8 @@ public class AttendanceAPIZombie {
 		saveCache(apiName, param, obj);
 		return obj;
 	}
-	public User getUserProfile(int userId)throws Exception{return getUserProfile(userId,true);}
-	public User getUserProfile(int userId,boolean cache) throws Exception{
+	public User getUserProfile(int userId)throws SocketTimeoutException,UnknownHostException,Exception{return getUserProfile(userId,true);}
+	public User getUserProfile(int userId,boolean cache)throws SocketTimeoutException,UnknownHostException,Exception{
 		String apiName = "/jsonresponse/get_user_profile/";
 		String method = "POST";	
 		Map param = new TreeMap();
@@ -457,30 +455,9 @@ public class AttendanceAPIZombie {
 		return obj;
 	}
 	
-//	public List<Course> getRegisteredCourse(int studentId) throws Exception {
-//		String apiName = "/jsonresponse/get_student_registered_courses/";
-//		String method = "POST";
-//		List<Entry<String,Object>>param = new ArrayList<Entry<String,Object>>();
-//		param.add(new SimpleEntry<String,Object>("student_id",studentId));
-//		
-//		String json = getJson(apiName, method, param);
-//		return GSON.fromJson(json, new TypeToken<List<Course>>() {
-//		}.getType());
-//	}
-	
-//
-//	public Student getStudentInfo(String studentId) throws Exception {
-//		String apiName = "/jsonService/getStudentInfo";
-//		String method = "POST";
-//		List<Entry<String, Object>> param = new ArrayList<Entry<String, Object>>(
-//				1);
-//		param.add(new SimpleEntry<String, Object>("studentId", studentId));
-//		String json = getJson(apiName, method, param);
-//		return GSON.fromJson(json, Student.class);
-//	}
-//
-	public Class getCurrentClassSchedule(long time)throws Exception {return getCurrentClassSchedule(time,true);}
-	public Class getCurrentClassSchedule(long time,boolean cache)throws Exception {
+
+	public Class getCurrentClassSchedule(long time)throws SocketTimeoutException,UnknownHostException,Exception{return getCurrentClassSchedule(time,true);}
+	public Class getCurrentClassSchedule(long time,boolean cache)throws SocketTimeoutException,UnknownHostException,Exception{
 		String apiName = "/jsonresponse/get_current_class_schedule/";
 		String method = "POST";	
 		checkLogin();
@@ -494,29 +471,45 @@ public class AttendanceAPIZombie {
 		saveCache(apiName, param, _class);
 		return _class;
 	}
-	public Class getCurrentClassSchedule(){
+	public Class getCurrentClassSchedule()throws SocketTimeoutException,UnknownHostException,Exception{
 		long addSecond=15*60;
 		long time=new Date().getTime()/1000;
 		Class currentClass=null;
 		try {
 			currentClass=getCurrentClassSchedule(time);
-		} catch (Exception e) {
+		}catch(IOException e){
 			System.out.println("class in current time not found.");
-			try {
+			try{
 				currentClass=getCurrentClassSchedule(time+addSecond);
-			} catch (Exception e1) {
+			}catch(IOException e1){
 				System.out.println("class in current time  "+addSecond/60.0+" minutes not found.");
 			}
 		}return currentClass;
 	}
 
-	public AttendanceResult updateStudentCheckInStatus(List<StudentAttendanceEntry> attendance) throws Exception{
-		String apiName = "/jsonresponse/update_class_attendance/";
-		String method = "POST";	
-		checkLogin();
-		String json = getJson(apiName, method, attendance);
-		System.out.print(json);
-		AttendanceResult atdResult=GSON.fromJson(json,AttendanceResult.class);
-		return atdResult;
+	public AttendanceResult updateStudentCheckInStatus(List<StudentAttendanceEntry>attendance) throws SocketTimeoutException,UnknownHostException,Exception{return updateStudentCheckInStatus(attendance,false);}
+	public AttendanceResult updateStudentCheckInStatus(List<StudentAttendanceEntry>attendance,boolean replace) throws SocketTimeoutException,UnknownHostException,Exception{
+		int classId=attendance.get(0).getClassId();
+		if(!replace){
+			List<StudentAttendanceEntry>attendance2=new ArrayList<StudentAttendanceEntry>();
+			for(StudentAttendanceEntry stdAtd:attendance)if(getAttendanceCache(stdAtd.getClassId())==null)attendance2.add(stdAtd);
+			attendance=attendance2;
+		}if(attendance!=null&&!attendance.isEmpty()){
+			String apiName = "/jsonresponse/update_class_attendance/";
+			String method = "POST";	
+			checkLogin();
+			String json = getJson(apiName, method, attendance);
+			AttendanceResult atr=getAttendanceCache(classId);
+			atr.put(GSON.fromJson(json,AttendanceResult.class));
+		}return getAttendanceCache(classId);
+	}
+	public AttendanceResult getAttendanceCache(int classId){
+		try{
+			if(!getAttendanceCache().containsKey(classId))getAttendanceCache().put(classId,new AttendanceResult(getClassScheduleCheckIn(classId)));
+		}catch(Exception e){}return getAttendanceCache().get(classId);
+	}
+	public Map<Integer,AttendanceResult>getAttendanceCache(){
+		if(attendanceCache==null)attendanceCache=new TreeMap<Integer,AttendanceResult>();
+		return attendanceCache;
 	}
 }
