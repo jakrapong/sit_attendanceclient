@@ -7,12 +7,14 @@ public class StudentAttendanceEntry {
 	private int status;
 	@com.google.gson.annotations.SerializedName("class_id")
 	private int classId;
-	private int updateStatus;
+	private Integer updateStatus;
 	
-	public StudentAttendanceEntry() {
-		
-	}
+	public static final int UPDATE_SUCCESS=1;
+	public static final int UPDATE_SUCCESS_NOT_CHANGE=2;
+	public static final int UPDATE_ERROR=3;
+	public static final int UPDATE_NOT_SEND=-1;
 	
+	public StudentAttendanceEntry() {}
 	public StudentAttendanceEntry(int userId, Integer status, Integer classId) {
 		this.userId = userId;
 		this.status = status;
@@ -42,4 +44,16 @@ public class StudentAttendanceEntry {
 	public void setUpdateStatus(Integer updateStatus) {
 		this.updateStatus = updateStatus;
 	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public void setClassId(int classId) {
+		this.classId = classId;
+	}
+	@Override
+	public String toString() {
+		return "StudentAttendanceEntry [userId=" + userId + ", status="
+				+ status + ", updateStatus=" + updateStatus + "]";
+	}
+	
 }

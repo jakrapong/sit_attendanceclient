@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Statistic  implements Serializable{
+	private int na;
    	private int absent;
    	private int late;
    	private int present;
@@ -27,10 +28,15 @@ public class Statistic  implements Serializable{
 	public void setPresent(int present){
 		this.present = present;
 	}
+	public int getNa() {
+		return na;
+	}
+	public void setNa(int na) {
+		this.na = na;
+	}
 	@Override
 	public String toString() {
-		return "Statistic [absent=" + absent + ", late=" + late + ", present="
-				+ present + "]";
+		return "Statistic [na=" + na + ", absent=" + absent + ", late=" + late
+				+ ", present=" + present + "]";
 	}
-	
 }

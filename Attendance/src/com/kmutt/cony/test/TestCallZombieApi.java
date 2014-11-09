@@ -366,7 +366,7 @@ public class TestCallZombieApi{
 		StudentAttendanceEntry st3 = new StudentAttendanceEntry();
 		st3.setClassId(1);
 		st3.setUserId(3);
-		st3.setStatus(StudentAttendance.STATUS_LATT);
+		st3.setStatus(StudentAttendance.STATUS_LATE);
 		
 		ArrayList<StudentAttendanceEntry> stList = new ArrayList<StudentAttendanceEntry>();
 		stList.add(st1);

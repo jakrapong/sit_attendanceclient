@@ -18,6 +18,7 @@ public class StudentStat implements Serializable{
 	private String address;
     private String twitter;
     private String email;
+    private int na;
     private int present;
     private int late;
    	private int absent;
@@ -125,5 +126,12 @@ public class StudentStat implements Serializable{
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
+	public int getNa() {
+		return na;
+	}
+	public void setNa(int na) {
+		this.na = na;
+	}
+	
 	
 }

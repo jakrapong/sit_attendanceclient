@@ -28,30 +28,38 @@ public class Test {
 	 */
 	public static void main(String[]arg) throws Exception{
 		AttendanceAPIZombie m=AttendanceAPIZombie.getInstance().setCredentail("user8","qwe123");
-		AttendanceResult atr=m.getAttendanceCache(1);
-		System.out.println(atr.getUpdateStatus());
+//		AttendanceResult atr=m.getAttendanceCache(1);
+//		System.out.println(atr.getUpdateStatus());
+		
 		StudentAttendanceEntry st1 = new StudentAttendanceEntry();
 		st1.setClassId(1);
-		st1.setUserId(11);
-		st1.setStatus(StudentAttendance.STATUS_LATT);
-		
+		st1.setUserId(13);
+		st1.setStatus(StudentAttendance.STATUS_PRESENT);
+//		
 		StudentAttendanceEntry st2 = new StudentAttendanceEntry();
 		st2.setClassId(1);
 		st2.setUserId(12);
-		st2.setStatus(StudentAttendance.STATUS_LATT);
-		
+		st2.setStatus(StudentAttendance.STATUS_PRESENT);
+//		
 		StudentAttendanceEntry st3 = new StudentAttendanceEntry();
 		st3.setClassId(1);
-		st3.setUserId(14);
-		st3.setStatus(StudentAttendance.STATUS_LATT);
+		st3.setUserId(11);
+		st3.setStatus(StudentAttendance.STATUS_PRESENT);
 		
+		StudentAttendanceEntry st4 = new StudentAttendanceEntry();
+		st4.setClassId(1);
+		st4.setUserId(14);
+		st4.setStatus(StudentAttendance.STATUS_PRESENT);
+//		
 		ArrayList<StudentAttendanceEntry> stList = new ArrayList<StudentAttendanceEntry>();
 		stList.add(st1);
 		stList.add(st2);
 		stList.add(st3);
-		System.out.println(m.updateStudentCheckInStatus(stList));
-		
-		
+		stList.add(st4);
+//		System.out.println(m.updateStudentCheckInStatus(stList));
+		List<StudentAttendance>listCSCI1=m.getClassScheduleCheckIn(1);
+		System.out.println(listCSCI1);
+//		
 		
 	}
 }

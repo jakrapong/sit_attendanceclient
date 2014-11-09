@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.commons.codec.binary.Base64;
 
@@ -490,22 +492,31 @@ public class AttendanceAPIZombie {
 	public AttendanceResult updateStudentCheckInStatus(List<StudentAttendanceEntry>attendance) throws SocketTimeoutException,UnknownHostException,Exception{return updateStudentCheckInStatus(attendance,false);}
 	public AttendanceResult updateStudentCheckInStatus(List<StudentAttendanceEntry>attendance,boolean replace) throws SocketTimeoutException,UnknownHostException,Exception{
 		int classId=attendance.get(0).getClassId();
+		Set<Integer>notSendSet=new TreeSet<Integer>();
 		if(!replace){
 			List<StudentAttendanceEntry>attendance2=new ArrayList<StudentAttendanceEntry>();
-			for(StudentAttendanceEntry stdAtd:attendance)if(getAttendanceCache(stdAtd.getClassId())==null)attendance2.add(stdAtd);
-			attendance=attendance2;
+			for(StudentAttendanceEntry stdAtd:attendance){
+				AttendanceResult atr=getAttendanceCache(stdAtd.getClassId());
+				if(atr!=null&&!atr.isChecked(stdAtd.getUserId()))
+					attendance2.add(stdAtd);
+				else
+					notSendSet.add(stdAtd.getUserId());
+			}attendance=attendance2;
 		}if(attendance!=null&&!attendance.isEmpty()){
 			String apiName = "/jsonresponse/update_class_attendance/";
 			String method = "POST";	
 			checkLogin();
 			String json = getJson(apiName, method, attendance);
 			AttendanceResult atr=getAttendanceCache(classId);
-			atr.put(GSON.fromJson(json,AttendanceResult.class));
+			atr.put(attendance,GSON.fromJson(json,AttendanceResult.class),notSendSet);
+		}else if(!notSendSet.isEmpty()){
+			AttendanceResult atr=getAttendanceCache(classId);
+			atr.put(notSendSet);
 		}return getAttendanceCache(classId);
 	}
 	public AttendanceResult getAttendanceCache(int classId){
 		try{
-			if(!getAttendanceCache().containsKey(classId))getAttendanceCache().put(classId,new AttendanceResult(getClassScheduleCheckIn(classId)));
+			if(!getAttendanceCache().containsKey(classId))getAttendanceCache().put(classId,new AttendanceResult(getClassScheduleCheckIn(classId),classId));
 		}catch(Exception e){}return getAttendanceCache().get(classId);
 	}
 	public Map<Integer,AttendanceResult>getAttendanceCache(){
