@@ -193,6 +193,7 @@ public class AttendanceAPIZombie {
 			String line;
 			while ((line = in.readLine()) != null)
 				sb.append(line);
+			System.out.println("JSON: "+sb);
 			return sb.toString();
 		}catch(UnknownHostException ex){
 			throw ex;
@@ -200,7 +201,6 @@ public class AttendanceAPIZombie {
 			throw ex;
 		}catch (IOException ex) {
 			ex.printStackTrace();
-			
 			String msg = ex.getMessage();
 			String s = "HTTP response code: ";
 			int i = msg.indexOf(s);
@@ -236,8 +236,7 @@ public class AttendanceAPIZombie {
 					.getBytes()));
 			connection.setRequestProperty("Authorization", "Basic "
 					+ authEncoded);
-		}		
-		System.out.print("\ncall " + apiName);		
+		}System.out.println("\ncall " + apiName);		
 		connection.setRequestProperty("Content-Type", "application/json");
 		connection.setRequestProperty("Content-Length","0");
 		DataOutputStream out = new DataOutputStream(connection.getOutputStream());			
@@ -252,6 +251,7 @@ public class AttendanceAPIZombie {
 			String line;
 			while ((line = in.readLine()) != null)
 				sb.append(line);
+			System.out.println("JSON: "+sb);
 			return sb.toString();
 		} catch(SocketTimeoutException|UnknownHostException ex){
 			throw ex;
