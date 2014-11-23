@@ -263,32 +263,27 @@ public class TestCallZombieApi{
 	}
 	@Test
 	public void getCurrentClassSchedule()throws Exception{
+		mAttendanceAPI.logout();
 		com.kmutt.cony.model.zombie.Class _class=null;
 		try{
-			_class=mAttendanceAPI.setCredentail("user8","qwe123").getCurrentClassSchedule(1409621400);
+			_class=mAttendanceAPI.setCredentail("Olarn","olarn1").getCurrentClassSchedule(1409794200);
 		}catch(Exception ex){
-			System.out.print(ex);
 			Assert.fail();
 		}Assert.assertNotNull(_class);
+		mAttendanceAPI.logout();
 	}
 	
-//	@Test
-//	public void getCurrentClassSchedule_TimeBetweenClass()throws Exception{
-//		com.kmutt.cony.model.zombie.Class _class=null;
-//		try{
-//			_class=mAttendanceAPI.setCredentail("user8","qwe123").getCurrentClassSchedule(1413763692);
-//		}catch(Exception ex){
-//			System.out.print(ex);
-//			Assert.fail();
-//		}Assert.assertNotNull(_class);
-//		Assert.assertEquals(1413763692,_class.getDatetimeSeconds());
-//		Assert.assertEquals("Class1 DSD Group 1",_class.getDescription());
-//		Assert.assertEquals(2,_class.getPeriod());
-//		Assert.assertEquals("M8-102",_class.getClassRoom());
-//		Assert.assertEquals(1,_class.getCourse().getCourseId());
-//		Assert.assertEquals("DSD",_class.getCourse().getCourseName());
-//		Assert.assertEquals("2014-1",_class.getCourse().getCourseSemester());
-//	}
+	@Test
+	public void getCurrentClassSchedule_TimeBetweenClass()throws Exception{
+		mAttendanceAPI.logout();
+		com.kmutt.cony.model.zombie.Class _class=null;
+		try{
+			_class=mAttendanceAPI.setCredentail("Olarn","olarn1").getCurrentClassSchedule(1409804200);
+		}catch(Exception ex){
+			Assert.fail();
+		}Assert.assertNotNull(_class);
+		mAttendanceAPI.logout();
+	}
 
 	@Test
 	public void getUpdateStatus()throws Exception{

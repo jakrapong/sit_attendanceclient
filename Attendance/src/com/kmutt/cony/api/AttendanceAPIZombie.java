@@ -219,9 +219,10 @@ public class AttendanceAPIZombie {
 	
 	private String getJson2(String apiName, String method,
 			List<Entry<String,Object>> params) throws SocketTimeoutException,UnknownHostException,Exception {
-		
+		int length=0;
 		if(params != null){
 			String paramData = toParamString2(params);
+//			length=paramData.getBytes().length;
 			apiName += paramData;
 		}
 		
@@ -237,8 +238,8 @@ public class AttendanceAPIZombie {
 			connection.setRequestProperty("Authorization", "Basic "
 					+ authEncoded);
 		}System.out.println("\ncall " + apiName);		
-		connection.setRequestProperty("Content-Type", "application/json");
-		connection.setRequestProperty("Content-Length","0");
+//		connection.setRequestProperty("Content-Type", "application/json");
+		connection.setRequestProperty("Content-Length",String.valueOf(length));
 		DataOutputStream out = new DataOutputStream(connection.getOutputStream());			
 		out.flush();
 		out.close();

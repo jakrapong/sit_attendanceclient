@@ -27,7 +27,8 @@ public class Test {
 	 * @throws Exception
 	 */
 	public static void main(String[]arg) throws Exception{
-		AttendanceAPIZombie m=AttendanceAPIZombie.getInstance().setCredentail("user8","qwe123");
-		System.out.print(m.getCurrentClassSchedule(1409621400));
+		AttendanceAPIZombie m=AttendanceAPIZombie.getInstance();
+		Class _class=m.setCredentail("Olarn","olarn1").getCurrentClassSchedule(1409794200);
+		System.out.print(_class);
 	}
 }
