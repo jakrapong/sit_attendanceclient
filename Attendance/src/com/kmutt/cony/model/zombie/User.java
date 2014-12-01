@@ -9,8 +9,8 @@ public class User implements Serializable{
 	public static final int TYPE_INSTRUCTOR = 0;
 	public static final int TYPE_STUDENT = 1;
 	
-	public static final int GENDER_MALE = 0;
-	public static final int GENDER_FEMALE = 1;
+	public static final int GENDER_MALE = 1;
+	public static final int GENDER_FEMALE = 0;
 	
 	private int userId;
 	private String predefinedId;
