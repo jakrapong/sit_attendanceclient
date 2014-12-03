@@ -28,7 +28,6 @@ public class Test {
 	 */
 	public static void main(String[]arg) throws Exception{
 		AttendanceAPIZombie m=AttendanceAPIZombie.getInstance();
-		Class _class=m.setCredentail("Olarn","olarn1").getCurrentClassSchedule(1409794200);
-		System.out.print(_class);
+		m.setCredentail("Olarn","olarn1").getClassScheduleCheckIn(21);
 	}
 }

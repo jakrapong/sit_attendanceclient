@@ -37,7 +37,7 @@ public class TestCallZombieApi{
 	@Test
 	public void testCallApiWithAuthenticationPasswordMismatch(){
 		try {
-			mAttendanceAPI.setCredentail("user8","sally").getMyInfo();
+			mAttendanceAPI.setCredentail("Olarn","olar1").getMyInfo();
 		} catch (Exception e) {
 			Assert.assertEquals("401",e.getMessage());
 		}
@@ -45,7 +45,7 @@ public class TestCallZombieApi{
 	@Test
 	public void testCallApiCorrectAuthentication(){
 		try {
-			mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
+			mAttendanceAPI.setCredentail("Olarn","olarn1").getMyInfo();
 		} catch (Exception e) {
 			Assert.fail();
 		}
@@ -59,7 +59,7 @@ public class TestCallZombieApi{
 	@Test
 	public void testisLogin_true(){
 		try{
-			mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
+			mAttendanceAPI.setCredentail("Olarn","olarn1").getMyInfo();
 		}catch(Exception ex){
 			ex.printStackTrace();
 			Assert.fail();
@@ -71,7 +71,7 @@ public class TestCallZombieApi{
 	@Test
 	public void testRestoreUser(){
 		try{
-			mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
+			mAttendanceAPI.setCredentail("Olarn","olarn1").getMyInfo();
 			Assert.assertTrue(mAttendanceAPI.restoreUser());
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -82,7 +82,7 @@ public class TestCallZombieApi{
 	@Test
 	public void testLogout(){
 		try{
-			mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
+			mAttendanceAPI.setCredentail("Olarn","olarn1").getMyInfo();
 		}catch(Exception ex){
 			ex.printStackTrace();
 			Assert.fail();
@@ -95,37 +95,37 @@ public class TestCallZombieApi{
 	public void testGetMyInfo(){
 		User user=null;
 		try{
-			user=mAttendanceAPI.setCredentail("user8","qwe123").getMyInfo();
+			user=mAttendanceAPI.setCredentail("Olarn","olarn1").getMyInfo();
 		}catch(Exception ex){
 			ex.printStackTrace();
 			Assert.fail();
 		}Assert.assertNotNull(user);
-		Assert.assertEquals("Zapata@gmail.com", user.getEmail());
-		Assert.assertEquals("Carlos", user.getFirstName());
+		Assert.assertEquals("olarnr@gmail.com", user.getEmail());
+		Assert.assertEquals("Olarn", user.getFirstName());
 		Assert.assertEquals(User.GENDER_MALE, user.getGender());
-		Assert.assertEquals("Zapata", user.getLastName());
+		Assert.assertEquals("Rojanapornpun", user.getLastName());
 		Assert.assertEquals(User.TYPE_INSTRUCTOR, user.getType());
 	}
 	@Test
 	public void testGetCourseList() throws Exception{
 		List<Course>list=null;
 		try{
-			list=mAttendanceAPI.setCredentail("user8","qwe123").getCourseList();
+			list=mAttendanceAPI.setCredentail("Olarn","olarn1").getCourseList();
 		}catch(Exception ex){
 			System.out.print(ex);
 			Assert.fail();
 		}Assert.assertNotNull(list);
 		Assert.assertEquals(2, list.size());
 		Course c0 = list.get(0);
-		Assert.assertEquals(6, c0.getCourseId());
+		Assert.assertEquals(3, c0.getCourseId());
 		Assert.assertEquals(1, c0.getGroups().size());
 		Groups c0g0 = c0.getGroups().get(0);
-		Assert.assertEquals(8, c0g0.getGroupId());
+		Assert.assertEquals(5, c0g0.getGroupId());
 		Course c1 = list.get(1);
-		Assert.assertEquals(7, c1.getCourseId());
+		Assert.assertEquals(5, c1.getCourseId());
 		Assert.assertEquals(1, c1.getGroups().size());
 		Groups c1g0 = c1.getGroups().get(0);
-		Assert.assertEquals(11, c1g0.getGroupId());
+		Assert.assertEquals(7, c1g0.getGroupId());
 	}
 	
 	@Test
@@ -145,7 +145,7 @@ public class TestCallZombieApi{
 	public void testGetClassSchedule() throws Exception{
 		List<Class>list=null;
 		try{
-			list=mAttendanceAPI.setCredentail("user8","qwe123").getClassSchedule(1);
+			list=mAttendanceAPI.setCredentail("Olarn","olarn1").getClassSchedule(1);
 		}catch(Exception ex){
 			System.out.print(ex);
 			Assert.fail();
@@ -176,18 +176,16 @@ public class TestCallZombieApi{
 	public void testGetClassScheduleCheckIn() throws Exception{
 		List<StudentAttendance>stdAtd=null;
 		try{
-			stdAtd=mAttendanceAPI.setCredentail("user8","qwe123").getClassScheduleCheckIn(1);
+			stdAtd=mAttendanceAPI.setCredentail("Olarn","olarn1").getClassScheduleCheckIn(22);
 		}catch(Exception ex){
 			System.out.print(ex);
 			Assert.fail();
 		}Assert.assertNotNull(stdAtd);
-		Assert.assertEquals(3,stdAtd.size());
+		Assert.assertEquals(2,stdAtd.size());
 		StudentAttendance s0 = stdAtd.get(0);
-		Assert.assertEquals(11, s0.getStudent().getUserId());
+		Assert.assertEquals(52, s0.getStudent().getUserId());
 		StudentAttendance s1 = stdAtd.get(1);
-		Assert.assertEquals(12, s1.getStudent().getUserId());
-		StudentAttendance s2 = stdAtd.get(2);
-		Assert.assertEquals(13, s2.getStudent().getUserId());
+		Assert.assertEquals(63, s1.getStudent().getUserId());
 	}
 	@Test
 	public void testGetClassScheduleCheckInWithCache() throws Exception{
@@ -203,18 +201,18 @@ public class TestCallZombieApi{
 	public void testGetStudentList() throws Exception{
 		List<StudentStat>list=null;
 		try{
-			list=mAttendanceAPI.setCredentail("user8","qwe123").getStudentList(2);
+			list=mAttendanceAPI.setCredentail("Olarn","olarn1").getStudentList(5);
 		}catch(Exception ex){
 			System.out.print(ex);
 			Assert.fail();
 		}Assert.assertNotNull(list);
-		Assert.assertEquals(2, list.size());
+		Assert.assertEquals(3, list.size());
 		StudentStat s0 = list.get(0);
-		Assert.assertEquals(14, s0.getUserId());
-		Assert.assertEquals("Jakrapong", s0.getFirstName());
-		Assert.assertEquals("Pandech", s0.getLastName());
+		Assert.assertEquals(52, s0.getUserId());
+		Assert.assertEquals("Nawapon", s0.getFirstName());
+		Assert.assertEquals("Ruttanakhunsang", s0.getLastName());
 		StudentStat s1 = list.get(1);
-		Assert.assertEquals(15, s1.getUserId());
+		Assert.assertEquals(62, s1.getUserId());
 		Assert.assertEquals("Kingkan", s1.getFirstName());
 		Assert.assertEquals("Banyenngam", s1.getLastName());
 	}
@@ -232,7 +230,7 @@ public class TestCallZombieApi{
 	public void testStudentInfo() throws Exception{
 		StudentInfo user=null;
 		try{
-			user=mAttendanceAPI.setCredentail("user8","qwe123").getStudentInfo(1, 1);
+			user=mAttendanceAPI.setCredentail("Olarn","olarn1").getStudentInfo(5,52);
 		}catch(Exception ex){
 			System.out.print(ex);
 			Assert.fail();
@@ -241,15 +239,15 @@ public class TestCallZombieApi{
 		Assert.assertNotNull(user.getStudent());
 		Assert.assertNotNull(user.getStatistic());
 		Assert.assertNotNull(user.getAttendance());
-		Assert.assertEquals("Alexander", user.getStudent().getFirstName());
-		Assert.assertEquals("Soto Cardona", user.getStudent().getLastName());
+		Assert.assertEquals("Nawapon", user.getStudent().getFirstName());
+		Assert.assertEquals("Ruttanakhunsang", user.getStudent().getLastName());
 		Assert.assertEquals(User.GENDER_MALE, user.getStudent().getGender());
-		Assert.assertEquals(1, user.getStudent().getUserId());
-		Assert.assertEquals(0, user.getStatistic().getPresent());
-		Assert.assertEquals(0, user.getStatistic().getAbsent());
-		Assert.assertEquals(0, user.getStatistic().getLate());
+		Assert.assertEquals(52, user.getStudent().getUserId());
+		Assert.assertEquals(3, user.getStatistic().getPresent());
+		Assert.assertEquals(1, user.getStatistic().getAbsent());
+		Assert.assertEquals(1, user.getStatistic().getLate());
 		Assert.assertEquals(0, user.getStatistic().getNa());
-		Assert.assertEquals(0, user.getAttendance().size());
+		Assert.assertEquals(5, user.getAttendance().size());
 	}
 	@Test
 	public void testStudentInfoWithCache() throws Exception{	
@@ -288,36 +286,30 @@ public class TestCallZombieApi{
 	@Test
 	public void getUpdateStatus()throws Exception{
 		StudentAttendanceEntry st11 = new StudentAttendanceEntry();
-		st11.setClassId(1);
-		st11.setUserId(11);
+		st11.setClassId(21);
+		st11.setUserId(52);
 		st11.setStatus(StudentAttendance.STATUS_PRESENT);
 		StudentAttendanceEntry st12 = new StudentAttendanceEntry();
-		st12.setClassId(1);
-		st12.setUserId(12);
-		st12.setStatus(StudentAttendance.STATUS_ABSENCE);
-		StudentAttendanceEntry st13 = new StudentAttendanceEntry();
-		st13.setClassId(1);
-		st13.setUserId(13);
-		st13.setStatus(StudentAttendance.STATUS_LATE);
+		st12.setClassId(21);
+		st12.setUserId(63);
+		st12.setStatus(StudentAttendance.STATUS_PRESENT);
 		ArrayList<StudentAttendanceEntry> stList = new ArrayList<StudentAttendanceEntry>();
 		stList.add(st11);
 		stList.add(st12);
-		stList.add(st13);
 		try{
-			AttendanceResult result = mAttendanceAPI.setCredentail("user8","qwe123").updateStudentCheckInStatus(stList,true);
+			AttendanceResult result = mAttendanceAPI.setCredentail("Olarn","olarn1").updateStudentCheckInStatus(stList,true);
 			Assert.assertNotNull(result);
 			int a=result.getStatistic().getAbsent();
 			int p=result.getStatistic().getPresent();
 			int l=result.getStatistic().getLate();
 			int n=result.getStatistic().getNa();
-			Assert.assertTrue(a==1);
-			Assert.assertTrue(p==1);
-			Assert.assertTrue(l==1);
+			Assert.assertTrue(a==0);
+			Assert.assertTrue(p==2);
+			Assert.assertTrue(l==0);
 			Assert.assertTrue(n==0);
-			st11.setStatus(StudentAttendance.STATUS_PRESENT);
-			st12.setStatus(StudentAttendance.STATUS_PRESENT);
-			st13.setStatus(StudentAttendance.STATUS_PRESENT);
-			result = mAttendanceAPI.setCredentail("user8","qwe123").updateStudentCheckInStatus(stList);
+			st11.setStatus(StudentAttendance.STATUS_ABSENCE);
+			st12.setStatus(StudentAttendance.STATUS_ABSENCE);
+			result = mAttendanceAPI.setCredentail("Olarn","olarn1").updateStudentCheckInStatus(stList);
 			Assert.assertNotNull(result);
 			Assert.assertEquals(a,result.getStatistic().getAbsent());
 			Assert.assertEquals(p,result.getStatistic().getPresent());
