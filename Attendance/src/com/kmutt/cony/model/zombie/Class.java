@@ -2,6 +2,7 @@
 package com.kmutt.cony.model.zombie;
 
 import java.io.Serializable;
+import java.util.Date;
 
 
 public class Class implements Serializable{
@@ -13,6 +14,7 @@ public class Class implements Serializable{
    	private int period;
    	private String classRoom;
    	private Course course;
+   	private int groupId;
 	public int getStatus() {
 		return status;
 	}
@@ -55,6 +57,27 @@ public class Class implements Serializable{
 	public void setCourse(Course course) {
 		this.course = course;
 	}
+//	public Date getDatetime() {
+//		return datetime;
+//	}
+//	public void setDatetime(Date datetime) {
+//		this.datetime = datetime;
+//	}
+	public int getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+	@Override
+	public String toString() {
+		return "Class [status=" + status + ", classId=" + classId
+				+ ", datetimeSeconds=" + datetimeSeconds + ", description="
+				+ description + ", period=" + period + ", classRoom="
+				+ classRoom + ", course=" + course + ", groupId=" + groupId
+				+ "]";
+	}
+	
    	
 
 }

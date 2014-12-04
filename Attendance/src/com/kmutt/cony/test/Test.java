@@ -1,5 +1,6 @@
 package com.kmutt.cony.test;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,6 +29,7 @@ public class Test {
 	 */
 	public static void main(String[]arg) throws Exception{
 		AttendanceAPIZombie m=AttendanceAPIZombie.getInstance();
-		m.setCredentail("Olarn","olarn1").getClassScheduleCheckIn(21);
+		System.out.print(m.setCredentail("Olarn","olarn1").getCurrentClassSchedule(1409794200));
+
 	}
 }

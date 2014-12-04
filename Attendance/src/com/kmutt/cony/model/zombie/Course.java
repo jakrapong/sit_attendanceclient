@@ -33,5 +33,12 @@ public class Course implements Serializable{
 	public void setGroups(List<Groups> groups) {
 		this.groups = groups;
 	}
+	@Override
+	public String toString() {
+		return "Course [courseId=" + courseId + ", courseName=" + courseName
+				+ ", courseSemester=" + courseSemester + ", groups=" + groups
+				+ "]";
+	}
+	
    	
 }
